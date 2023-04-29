@@ -8,7 +8,6 @@
 ### 4 Apply Funktionen
 ### 5 Regressionsanalyse
 ### 6 Optimierer in R (optim)
-### 7 Fehlermeldungen
 
 rm(list=ls()) # Bereinigung der R-Umgebung
 setwd("C:/Repositories/lasso_oil_price_forcast/R-Tutorium")
