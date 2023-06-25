@@ -70,17 +70,17 @@ filter_data <- function(data, dataset, start_date, end_date) {
 #######################################################################
 
 aggregate_data <- function(data, dataset) {
-  # Only proceed if the data is weekly
-  if (dataset$frequency == "Weekly") {
-    # Convert the date column to Date type
-    data <- data %>%
-        mutate(date = floor_date(data[[dataset$date_column]], "month")) %>%
-        group_by(date) %>%
-        summarise(mean_data = mean(!!sym(dataset$quantity_column), na.rm = TRUE),
-        variance_data = var(!!sym(dataset$quantity_column), na.rm = TRUE)) %>%
-        rename(!!paste0("mean_", dataset$quantity_column) := mean_data,
-            !!paste0("variance_", dataset$quantity_column) := variance_data)
-  }
+    # Only proceed if the data is weekly or daily
+    if ((dataset$frequency == "Weekly") || (dataset$frequency == "Daily")) {
+        # Convert the date column to Date type
+        data <- data %>%
+            mutate(date = floor_date(data[[dataset$date_column]], "month")) %>%
+            group_by(date) %>%
+            summarise(mean_data = mean(!!sym(dataset$quantity_column), na.rm = TRUE),
+            variance_data = var(!!sym(dataset$quantity_column), na.rm = TRUE)) %>%
+            rename(!!paste0("mean_", dataset$quantity_column) := mean_data,
+                !!paste0("variance_", dataset$quantity_column) := variance_data)
+    }
   return(data)
 }
 
@@ -158,7 +158,25 @@ write.csv(supply_demand_data, file = "Data/csv/supply_demand_data.csv", row.name
 #######################################################################
 ###------------------- Macroeconomic indicators --------------------###
 #######################################################################
+file_names <- c("CPI_OECD_Monthly", "CPI_USA_Monthly", "UNRATE_USA", "UNRATE_EU",
+                "Money_supply_M_USA",
+                "Economic_policy_uncerainty_index_USA",
+                "Economic_policy_uncerainty_index_EU")
+macroeconomic_data <- NULL
 
+for (name in file_names) {
+  data <- retrieve_data(name, start_date, end_date, frequency)
+  if (!is.null(data)) {
+    if (is.null(macroeconomic_data)) {
+      macroeconomic_data <- data
+    } else {
+      macroeconomic_data <- merge(macroeconomic_data, data, by = "date", all = TRUE)
+    }
+  }
+}
+
+save(macroeconomic_data, file = "Data/Rda/macroeconomic_data.rda")
+write.csv(macroeconomic_data, file = "Data/csv/macroeconomic_data.csv", row.names = FALSE)
 
 #######################################################################
 ###------------------- Financial market factors --------------------###
