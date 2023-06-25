@@ -62,3 +62,6 @@ rsconnect/
 *.pdf
 *.aux
 *.bib
+
+# Ignore Rdata files
+*.rda
