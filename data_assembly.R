@@ -181,6 +181,23 @@ write.csv(macroeconomic_data, file = "Data/csv/macroeconomic_data.csv", row.name
 #######################################################################
 ###------------------- Financial market factors --------------------###
 #######################################################################
+file_names <- c("S&P_500_Monthly", "MSCIWORLD","STOXX600")
+
+financial_data <- NULL
+
+for (name in file_names) {
+  data <- retrieve_data(name, start_date, end_date, frequency)
+  if (!is.null(data)) {
+    if (is.null(financial_data)) {
+      financial_data <- data
+    } else {
+      financial_data <- merge(financial_data, data, by = "date", all = TRUE)
+    }
+  }
+}
+
+save(financial_data, file = "Data/Rda/financial_data.rda")
+write.csv(financial_data, file = "Data/csv/financial_data.csv", row.names = FALSE)
 
 
 #######################################################################
@@ -191,3 +208,21 @@ write.csv(macroeconomic_data, file = "Data/csv/macroeconomic_data.csv", row.name
 #######################################################################
 ###------ Commodities/clean energy/electric cars indicators --------###
 #######################################################################
+file_names <- c("S&P_GSCI_Commodity_Index_Monthly_cleaned", "Gold_Futures_Historical_Monthly_cleaned",
+"Copper_Futures_Historical_Monthly_cleaned")
+
+commodities_data <- NULL
+
+for (name in file_names) {
+  data <- retrieve_data(name, start_date, end_date, frequency)
+  if (!is.null(data)) {
+    if (is.null(commodities_data)) {
+      commodities_data <- data
+    } else {
+      commodities_data <- merge(commodities_data, data, by = "date", all = TRUE)
+    }
+  }
+}
+
+save(commodities_data, file = "Data/Rda/commodities_data.rda")
+write.csv(commodities_data, file = "Data/csv/commodities_data.csv", row.names = FALSE)
