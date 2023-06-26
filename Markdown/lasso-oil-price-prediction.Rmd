@@ -1,0 +1,85 @@
+---
+title             : "Using LASSO Regression to forecast Returns on Oil Asset Pricing"
+shorttitle        : "Seminar assignment"
+date              : "`r format(Sys.Date(),'%e de %B, %Y')`"
+author:
+  - name          : "Luca Zangari (Q3167577)"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    email         : "lucazangari.93@gmail.com"
+affiliation       :
+  - id            : "1"
+    institution   : "FernUniversität in Hagen"
+authornote        : "I declare that all material presented in this paper is my own work or fully and specifically acknowledged wherever adapted from other sources. I understand that if at any time it is shown that we have significantly misrepresented material presented here, any degree or credits awarded to us on the basis of that material may be revoked. I declare that all statements and information contained herein are true, correct and accurate to the best of my knowledge and belief."
+
+abstract: "Abstract of the paper."
+
+wordcount         : "4353"
+keywords          : "Statistics, Data Mining, Neural Network, Factor Analysis"
+bibliography      : ["mybib.bib", "r-references.bib"]
+
+floatsintext      : yes
+figurelist        : yes
+tablelist         : yes
+footnotelist      : no
+linenumbers       : no
+linkcolor         : "blue"
+mask              : no
+draft             : no
+
+classoption       : "doc"
+output            :
+  papaja::apa6_pdf:
+    fig_caption: yes
+    includes:
+        in_header: ./fig-valign.tex # Use papaja::apa6_docx for Word documents
+---
+```{r setup, include = FALSE}
+library("papaja")
+r_refs("r-references.bib")
+my_citation <- cite_r(file = "r-references.bib")
+```
+
+```{r analysis-preferences}
+# Seed for random number generation
+set.seed(42)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+```
+
+
+
+# Methods
+We report how we determined our sample size, all data exclusions (if any), all manipulations, and all measures in the study. <!-- 21-word solution (Simmons, Nelson & Simonsohn, 2012; retrieved from http://ssrn.com/abstract=2160588) -->
+
+## Participants
+Here comes Participants
+
+## Material
+Here comes Materilas
+
+## Procedure
+Here comes Procedure
+
+## Data analysis
+Here comes data analysis
+
+# Results
+Here comes results
+
+# Discussion
+Here comes discussion
+
+\listoffigures
+\listoftables
+
+\newpage
+
+# Bibliography and Libraries
+`r my_citation `
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+<div id="refs" custom-style="Bibliography"></div>
+\endgroup
