@@ -71,8 +71,8 @@
             "date_format": "%m/%d/%Y",
             "file_type": "csv",
             "path": "Data/GlobalOilProduction/Weekly_U.S._Ending_Stocks_of_Crude_Oil.csv",
-            "date_column": "Week of",
-            "quantity_column": "Stocks_Crude_Oil [Thousand Barrels]"
+            "date_column": "Week",
+            "quantity_column": "Stocks_Crude_Oil_Thousand_Barrels"
 
         },
         {
