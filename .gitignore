@@ -65,3 +65,7 @@ rsconnect/
 
 # Ignore Rdata files
 *.rda
+
+# ignore png and svg files
+*.png
+*.svg

@@ -83,8 +83,8 @@
             "date_format": "%m/%d/%Y",
             "file_type": "csv",
             "path": "Data/GlobalOilProduction/Weekly_U.S._Product_Supplied_of_Petroleum_Products.csv",
-            "date_column": "Week of",
-            "quantity_column": "US_Product_Supplied_of_Petroleum_Products [Thousand Barrels per Day]"
+            "date_column": "Week",
+            "quantity_column": "US_Product_Supplied_of_Petroleum_Products_Thousand_Barrels_per_Day"
         },
         {
             "file_name": "Weekly_U.S._Net_Imports_of_Crude_Oil_and_Petroleum_Products",
@@ -94,8 +94,8 @@
             "date_format": "%m/%d/%Y",
             "file_type": "csv",
             "path": "Data/GlobalOilProduction/Weekly_U.S._Net_Imports_of_Crude_Oil_and_Petroleum_Products.csv",
-            "date_column": "Week of",
-            "quantity_column": "Net_Imports_of_Crude_Oil_and_Petroleum_Products [Thousand Barrels per Day]"
+            "date_column": "Week",
+            "quantity_column": "Net_Imports_of_Crude_Oil_and_Petroleum_Products_Thousand_Barrels_per_Day"
         },
         {
             "file_name": "OPEC_Oil_Production",
@@ -321,6 +321,37 @@
             "file_type": "csv",
             "path": "Data/Commodity_Prices/Copper_Futures_Historical_Monthly_cleaned.csv",
             "date_column": "Date"
+        }
+    ]
+},
+{
+    "Name": "Geopolitical Uncertainty",
+    "Type": "Geopolitical Uncertainty",
+    "Description": "Geopolitical Uncertainty Indicators",
+    "URL": "https://www.policyuncertainty.com/",
+    "Citation": "",
+    "Datasets":[
+        {
+            "file_name": "WUI_monthly",
+            "frequency": "Monthly",
+            "start_date": "01.01.1990",
+            "end_date": "01.04.2023",
+            "date_format": "%Y/%m/%d",
+            "file_type": "csv",
+            "path": "Data/Political Factors/WUI_monthly.csv",
+            "date_column": "DATE",
+            "url": "https://www.policyuncertainty.com/wui_quarterly.html"
+        },
+        {
+            "fike_name": "Geopolitical_Risk_indicator_monthly",
+            "frequency": "Monthly",
+            "start_date": "01.01.1985",
+            "end_date": "01.05.2023",
+            "date_format": "%Y/%m/%d",
+            "file_type": "csv",
+            "path": "Data/Political Factors/Geopolitical_Risk_indicator_monthly.csv",
+            "date_column": "DATE",
+            "url": "https://www.policyuncertainty.com/gpr.html"
         }
     ]
 }
