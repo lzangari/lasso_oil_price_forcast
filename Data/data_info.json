@@ -9,9 +9,10 @@
         "frequency": "Monthly",
         "start_date": "01.01.1968",
         "end_date": "01.05.2023",
-        "date_format": "%b-%y",
-        "file_type": "xlsx",
-        "path": "Data/Demand Factors/Kilian_index_monthly.xlsx"
+        "date_format": "%d/%m/%Y",
+        "file_type": "csv",
+        "path": "Data/Demand Factors/Kilian_index_monthly.csv",
+        "date_column": "Date"
     }]
 },
 {
@@ -20,16 +21,7 @@
     "Description": "Nominal West Texas Intermediate Spot Price measured in Dollars per barrel",
     "URL": "https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=RWTC&f=M",
     "Citation": "",
-    "Datasets": [{
-        "file_name": "WTI_CrudeOil_Annual",
-        "frequency": "Annual",
-        "start_date": "01.01.1986",
-        "end_date": "01.01.2022",
-        "date_format": "%Y-%m-%d",
-        "file_type": "csv",
-        "path": "Data/Crude Oil Prices WTI/WTI_CrudeOil_Annual.csv",
-        "date_column": "DATE"
-    },
+    "Datasets": [
     {
         "file_name": "WTI_CrudeOil_Monthly",
         "frequency": "Monthly",
@@ -38,26 +30,6 @@
         "date_format": "%Y-%m-%d",
         "file_type": "csv",
         "path": "Data/Crude Oil Prices WTI/WTI_CrudeOil_Monthly.csv",
-        "date_column": "DATE"
-    },
-    {
-        "file_name": "WTI_CrudeOil_Daily",
-        "frequency": "Daily",
-        "start_date": "01.01.1986",
-        "end_date": "12.06.2023",
-        "date_format": "%Y-%m-%d",
-        "file_type": "csv",
-        "path": "Data/Crude Oil Prices WTI/WTI_CrudeOil_Daily.csv",
-        "date_column": "DATE"
-    },
-    {
-        "file_name": "WTI_CrudeOil_Weekly",
-        "frequency": "Weekly",
-        "start_date": "01.01.1986",
-        "end_date": "09.06.2023",
-        "date_format": "%Y-%m-%d",
-        "file_type": "csv",
-        "path": "Data/Crude Oil Prices WTI/WTI_CrudeOil_Weekly.csv",
         "date_column": "DATE"
     }
 ]
@@ -70,15 +42,6 @@
     "Citation": "",
     "Datasets": [
         {
-            "file_name": "world_primary",
-            "frequency": "Monthly",
-            "start_date": "01.01.1920",
-            "end_date": "01.05.2023",
-            "date_format": "%m%y",
-            "file_type": "csv",
-            "path": "Data/GlobalOilProduction/world_primary.csv"
-        },
-        {
             "file_name": "U.S._Field_Production_of_Crude_Oil",
             "frequency": "Monthly",
             "start_date": "01.01.1920",
@@ -88,16 +51,6 @@
             "path": "Data/GlobalOilProduction/U.S._Field_Production_of_Crude_Oil.csv",
             "date_column": "Month",
             "quantity_column": "Production_Crude_Oil [Thousand Barrels per Day]"
-        },
-        {
-            "file_name": "Weekly_U.S._Field_Production_of_Crude_Oil",
-            "frequency": "Weekly",
-            "start_date": "07.01.1983",
-            "end_date": "16.06.2023",
-            "date_format": "%m/%d/%Y",
-            "file_type": "csv",
-            "path": "Data/GlobalOilProduction/Weekly_U.S._Field_Production_of_Crude_Oil.csv",
-            "date_column": "Week of"
         },
         {
             "file_name": "U.S._Exports_of_Crude_Oil",
@@ -157,41 +110,6 @@
     ]
 },
 {
-    "Name": "GlobalPrice of WTI Crude",
-    "Type": "Crude Oil Price",
-    "Description": "Global price of WTI Crude",
-    "URL": "https://fred.stlouisfed.org/series/POILWTIUSDA",
-    "Citation": "",
-    "Datasets": [{
-            "file_name": "GlobalPrice_of_WTI_Crude_Annual",
-            "frequency": "Annual",
-            "start_date": "01.01.1990",
-            "end_date": "01.01.2022",
-            "date_format": "%y-%m-%d",
-            "file_type": "csv",
-            "path": "Data/GlobalPrice of WTI Crude/Global_price_of_WTI_Crude_Annual.csv"
-        },
-        {
-            "file_name": "GlobalPrice_of_WTI_Crude_Monthly",
-            "frequency": "Monthly",
-            "start_date": "01.01.1990",
-            "end_date": "01.05.2023",
-            "date_format": "%y-%m-%d",
-            "file_type": "csv",
-            "path": "Data/GlobalPrice of WTI Crude/Global_price_of_WTI_Crude_Monthly.csv"
-        },
-        {
-            "file_name": "GlobalPrice_of_WTI_Crude_Qurterly",
-            "frequency": "Qurterly",
-            "start_date": "01.01.1990",
-            "end_date": "01.01.2023",
-            "date_format": "%y-%m-%d",
-            "file_type": "csv",
-            "path": "Data/GlobalPrice of WTI Crude/Global_price_of_WTI_Crude_Qurterly.csv"
-        }
-    ]
-},
-{
     "Name": "GDP",
     "Type": "Demand",
     "Description": "GDP Data for different countries from OECD",
@@ -199,23 +117,25 @@
     "Citation": "",
     "Datasets":[
         {
-            "file_name": "Quarterly_GDP_Country",
-            "frequency": "Quarterly",
-            "start_date": "01.01.1961",
+            "file_name": "GDP_EU_Monthly",
+            "frequency": "Monthly",
+            "start_date": "01.01.1995",
             "end_date": "01.01.2023",
-            "date_format": "%y-Q%q",
+            "date_format": "%Y-%m-%d",
             "file_type": "csv",
-            "path": "Data/GDP/Quarterly_GDP_Country.csv"
+            "path": "Data/GDP/GDP_EU_Monthly.csv",
+            "date_column": "DATE",
+            "url": "https://fred.stlouisfed.org/series/CPMNACSCAB1GQEU272020"
         },
         {
-            "file_name": "Annual_GDP_Country",
-            "frequency": "Annual",
-            "start_date": "01.01.1961",
+            "file_name": "GDP_US_Monthly",
+            "frequency": "Monthly",
+            "start_date": "01.01.1947",
             "end_date": "01.01.2023",
-            "date_format": "%y",
+            "date_format": "%Y-%m-%d",
             "file_type": "csv",
-            "path": "Data/GDP/Annual_GDP_Country.csv",
-            "date_column": "Date"
+            "path": "Data/GDP/GDP_US_Monthly.csv",
+            "date_column": "DATE"
         }
     ]
 
@@ -271,36 +191,11 @@
             "frequency": "Monthly",
             "start_date": "01.07.1954",
             "end_date": "01.05.2023",
-            "date_format": "%y-%m-%d",
+            "date_format": "%Y-%m-%d",
             "file_type": "csv",
-            "path": "Data/InterestRates/FEDFUNDS.csv"
-        },
-        {
-            "file_name": "ECB_interests_daily",
-            "frequency": "Daily",
-            "start_date": "01.01.1999",
-            "end_date": "23.06.2023",
-            "date_format": "%y-%m-%d",
-            "file_type": "csv",
-            "path": "Data/InterestRates/ECB_interests_daily.csv"
-        },
-        {
-            "file_name": "ECB_2_interests_daily",
-            "frequency": "Daily",
-            "start_date": "01.01.1999",
-            "end_date": "23.06.2023",
-            "date_format": "%y-%m-%d",
-            "file_type": "csv",
-            "path": "Data/InterestRates/ECB_2_interests_daily.csv"
-        },
-        {
-            "file_name": "STOXX600",
-            "frequency": "Monthly",
-            "start_date": "01.05.2004",
-            "end_date": "01.06.2023",
-            "date_format": "%y-%m-%d",
-            "file_type": "csv",
-            "path": "Data/InterestRates/STOXX600.csv"
+            "path": "Data/InterestRates/FEDFUNDS.csv",
+            "date_column": "DATE",
+            "url": "https://fred.stlouisfed.org/series/FEDFUNDS"
         }
     ]
 },
