@@ -34,6 +34,10 @@ end_date <- "2023-05-01"
 
 
 #######################################################################
+###---------------------- Helper Functions -------------------------###
+#######################################################################
+# Find the dataset based on the name and frequency                    #
+#######################################################################
 find_dataset <- function(name, frequency) {
     for (data in data_info) {
         for (ds in data$Datasets) {
@@ -45,6 +49,8 @@ find_dataset <- function(name, frequency) {
     return(NULL)
 }
 #######################################################################
+# Read the data from a file based on the file type                    #
+#######################################################################
 read_data <- function(dataset) {
     if (dataset$file_type == "xlsx") {
         return(read_excel(dataset$path))
@@ -54,6 +60,8 @@ read_data <- function(dataset) {
         stop("Unsupported file type")
     }
 }
+#######################################################################
+# Filter the data based on the start and end dates                    #
 #######################################################################
 filter_data <- function(data, dataset, start_date, end_date) {
 
@@ -68,7 +76,8 @@ filter_data <- function(data, dataset, start_date, end_date) {
 }
 
 #######################################################################
-
+# Aggregate the data based on the frequency                           #
+#######################################################################
 aggregate_data <- function(data, dataset) {
     # Only proceed if the data is weekly or daily
     if ((dataset$frequency == "Weekly") || (dataset$frequency == "Daily")) {
@@ -84,6 +93,9 @@ aggregate_data <- function(data, dataset) {
   return(data)
 }
 
+#######################################################################
+# Retrieve data from a file based on the name, start date, end date   #
+# and frequency                                                       #
 #######################################################################
 retrieve_data <- function(name, start_date, end_date, frequency) {
     dataset <- find_dataset(name, frequency)
@@ -107,6 +119,30 @@ retrieve_data <- function(name, start_date, end_date, frequency) {
     return(data)
 }
 
+#######################################################################
+# Retrieve and merge data from multiple files into one data frame     #
+# based on the date column and save it as an rda and csv file         #
+#######################################################################
+retrieve_and_merge_data <- function(file_names, start_date, end_date, frequency, data_type) {
+  merged_data <- NULL
+
+  for (name in file_names) {
+    data <- retrieve_data(name, start_date, end_date, frequency)
+    if (!is.null(data)) {
+      if (is.null(merged_data)) {
+        merged_data <- data
+      } else {
+        merged_data <- merge(merged_data, data, by = "date", all = TRUE)
+      }
+    }
+  }
+
+  save(merged_data, file = paste("Data/Rda/", data_type, ".rda", sep = ""))
+  write.csv(merged_data, file = paste("Data/csv/", data_type, ".csv", sep = ""), row.names = FALSE)
+
+  return(merged_data)
+}
+
 
 #######################################################################
 ###---------------------- Oil Prices -------------------------------###
@@ -119,7 +155,7 @@ data <- retrieve_data("WTI_CrudeOil_Monthly", start_date, end_date, frequency)
     }
 # Rename the columns by their positions
 names(WTI_oil_data)[1] <- "date"
-names(WTI_oil_data)[2] <- "price [dollar / barrel]"
+names(WTI_oil_data)[2] <- "WTI Crude Oil Price [USD/barrel]"
 # Save the data as an rda file and csv file
 save(WTI_oil_data, file = "Data/Rda/WTI_oil_data.rda")
 write.csv(WTI_oil_data, file = "Data/csv/WTI_oil_data.csv", row.names = FALSE)
@@ -128,101 +164,77 @@ write.csv(WTI_oil_data, file = "Data/csv/WTI_oil_data.csv", row.names = FALSE)
 #######################################################################
 ###---------------------- Supply & Demand --------------------------###
 #######################################################################
-# Get the names of the supply and demand data
-file_names <- c("Weekly_U.S._Ending_Stocks_of_Crude_Oil", "U.S._Exports_of_Crude_Oil",
-                "U.S._Field_Production_of_Crude_Oil",
-                "Weekly_U.S._Product_Supplied_of_Petroleum_Products",
-                "Weekly_U.S._Net_Imports_of_Crude_Oil_and_Petroleum_Products",
-                "OPEC_Oil_Production")
-# Initialize an empty data frame for supply and demand data
-supply_demand_data <- NULL
-
-for (name in file_names) {
-  data <- retrieve_data(name, start_date, end_date, frequency)
-  if (!is.null(data)) {
-    if (is.null(supply_demand_data)) {
-      supply_demand_data <- data
-    } else {
-      supply_demand_data <- merge(supply_demand_data, data, by = "date", all = TRUE)
-    }
-  }
-}
-
-save(supply_demand_data, file = "Data/Rda/supply_demand_data.rda")
-write.csv(supply_demand_data, file = "Data/csv/supply_demand_data.csv", row.names = FALSE)
+supply_demand_file_names <- c("Weekly_U.S._Ending_Stocks_of_Crude_Oil",
+                              "U.S._Exports_of_Crude_Oil",
+                              "U.S._Field_Production_of_Crude_Oil",
+                              "Weekly_U.S._Product_Supplied_of_Petroleum_Products",
+                              "Weekly_U.S._Net_Imports_of_Crude_Oil_and_Petroleum_Products",
+                              "OPEC_Oil_Production","Kilian_index_monthly")
+supply_demand_data <- retrieve_and_merge_data(supply_demand_file_names, start_date, end_date, frequency, "supply_demand_data")
 
 #######################################################################
-###------------------ Oil consumption indicators -------------------###
+###---------------------- Macroeconomic Factors --------------------###
 #######################################################################
-
-#######################################################################
-###------------------- Macroeconomic indicators --------------------###
-#######################################################################
-file_names <- c("CPI_OECD_Monthly", "CPI_USA_Monthly", "UNRATE_USA", "UNRATE_EU",
-                "Money_supply_M_USA",
-                "Economic_policy_uncerainty_index_USA",
-                "Economic_policy_uncerainty_index_EU")
-macroeconomic_data <- NULL
-
-for (name in file_names) {
-  data <- retrieve_data(name, start_date, end_date, frequency)
-  if (!is.null(data)) {
-    if (is.null(macroeconomic_data)) {
-      macroeconomic_data <- data
-    } else {
-      macroeconomic_data <- merge(macroeconomic_data, data, by = "date", all = TRUE)
-    }
-  }
-}
-
-save(macroeconomic_data, file = "Data/Rda/macroeconomic_data.rda")
-write.csv(macroeconomic_data, file = "Data/csv/macroeconomic_data.csv", row.names = FALSE)
+macroeconomic_file_names <- c("CPI_OECD_Monthly",
+                              "CPI_USA_Monthly",
+                              "UNRATE_USA",
+                              "UNRATE_EU",
+                              "Money_supply_M_USA",
+                              "Economic_policy_uncerainty_index_USA",
+                              "Economic_policy_uncerainty_index_EU",
+                              "GDP_EU_Monthly",
+                              "GDP_US_Monthly",
+                              "FEDFUNDS")
+macroeconomic_data <- retrieve_and_merge_data(macroeconomic_file_names, start_date, end_date, frequency, "macroeconomic_data")
 
 #######################################################################
-###------------------- Financial market factors --------------------###
+###---------------------- Financial Indicators ----------------------###
 #######################################################################
-file_names <- c("S&P_500_Monthly", "MSCIWORLD","STOXX600")
+financial_file_names <- c("S&P_500_Monthly",
+                          "MSCIWORLD",
+                          "STOXX600")
+financial_data <- retrieve_and_merge_data(financial_file_names, start_date, end_date, frequency, "financial_data")
 
-financial_data <- NULL
+#######################################################################
+###---------------------- Commodity Prices -------------------------###
+#######################################################################
+commodities_file_names <- c("S&P_GSCI_Commodity_Index_Monthly_cleaned",
+                            "Gold_Futures_Historical_Monthly_cleaned",
+                            "Copper_Futures_Historical_Monthly_cleaned")
+commodities_data <- retrieve_and_merge_data(commodities_file_names, start_date, end_date, frequency, "commodities_data")
 
-for (name in file_names) {
-  data <- retrieve_data(name, start_date, end_date, frequency)
-  if (!is.null(data)) {
-    if (is.null(financial_data)) {
-      financial_data <- data
-    } else {
-      financial_data <- merge(financial_data, data, by = "date", all = TRUE)
-    }
-  }
-}
 
-save(financial_data, file = "Data/Rda/financial_data.rda")
-write.csv(financial_data, file = "Data/csv/financial_data.csv", row.names = FALSE)
+# Assemble all of the data into one data frame and save it as an rda and csv file
+# Merge all data frames together
+all_data <- Reduce(function(x, y) merge(x, y, by = "date", all = TRUE),
+                   list(WTI_oil_data, supply_demand_data, macroeconomic_data, financial_data, commodities_data))
+
+# Save as .rda
+save(all_data, file = "Data/Rda/all_data.rda")
+
+# Save as .csv
+write.csv(all_data, file = "Data/csv/all_data.csv", row.names = FALSE)
 
 
 #######################################################################
-###--------------------- Political indicators ----------------------###
+# remove the columns that are not needed                              #
+# rename the columns of the data frame                                #
 #######################################################################
+# remove the columns that are not needed
+drops <- c("variance_Stocks_Crude_Oil [Thousand Barrels]",
+            "variance_US_Product_Supplied_of_Petroleum_Products [Thousand Barrels per Day]",
+            "variance_Net_Imports_of_Crude_Oil_and_Petroleum_Products [Thousand Barrels per Day]")
 
+all_data <- all_data[, !(names(all_data) %in% drops)]
 
-#######################################################################
-###------ Commodities/clean energy/electric cars indicators --------###
-#######################################################################
-file_names <- c("S&P_GSCI_Commodity_Index_Monthly_cleaned", "Gold_Futures_Historical_Monthly_cleaned",
-"Copper_Futures_Historical_Monthly_cleaned")
+# rename the columns of the data frame
+new_names <- c("date","oil_price", "oil_stock", "oil_export", "oil_production",
+            "product_supply", "product_net_import", "opec_production",
+            "killian_index", "cpi_oecd", "cpi_usa", "unrate_usa", "unrate_eu",
+            "epui_eu", "epui_usa", "gdp_eu", "gdp_usa", "federal_fund",
+            "sp500", "msci", "stoxx50", "gsci", "gold_price", "copper_future")
 
-commodities_data <- NULL
+names(all_data) <- new_names
 
-for (name in file_names) {
-  data <- retrieve_data(name, start_date, end_date, frequency)
-  if (!is.null(data)) {
-    if (is.null(commodities_data)) {
-      commodities_data <- data
-    } else {
-      commodities_data <- merge(commodities_data, data, by = "date", all = TRUE)
-    }
-  }
-}
-
-save(commodities_data, file = "Data/Rda/commodities_data.rda")
-write.csv(commodities_data, file = "Data/csv/commodities_data.csv", row.names = FALSE)
+# Save as .rda the cleaned data
+save(all_data, file = "Data/Rda/all_data_cleaned.rda")
