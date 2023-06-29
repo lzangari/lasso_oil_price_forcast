@@ -238,3 +238,6 @@ names(all_data) <- new_names
 
 # Save as .rda the cleaned data
 save(all_data, file = "Data/Rda/all_data_cleaned.rda")
+
+# Save as .csv the cleaned data
+write.csv(all_data, file = "Data/csv/all_data_cleaned.csv", row.names = FALSE)
