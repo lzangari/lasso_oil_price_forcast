@@ -9,7 +9,7 @@
         "frequency": "Monthly",
         "start_date": "01.01.1968",
         "end_date": "01.05.2023",
-        "date_format": "%d/%m/%Y",
+        "date_format": "%m/%d/%Y",
         "file_type": "csv",
         "path": "Data/Demand Factors/Kilian_index_monthly.csv",
         "date_column": "Date"
@@ -87,14 +87,14 @@
             "quantity_column": "US_Product_Supplied_of_Petroleum_Products_Thousand_Barrels_per_Day"
         },
         {
-            "file_name": "Weekly_U.S._Net_Imports_of_Crude_Oil_and_Petroleum_Products",
-            "frequency": "Weekly",
-            "start_date": "08.02.1991",
-            "end_date": "16.06.2023",
+            "file_name": "Monthly_U.S._Net_Imports_of_Crude_Oil_and_Petroleum_Products",
+            "frequency": "Monthly",
+            "start_date": "01.02.1991",
+            "end_date": "01.06.2023",
             "date_format": "%m/%d/%Y",
             "file_type": "csv",
-            "path": "Data/GlobalOilProduction/Weekly_U.S._Net_Imports_of_Crude_Oil_and_Petroleum_Products.csv",
-            "date_column": "Week",
+            "path": "Data/GlobalOilProduction/Monthly_U.S._Net_Imports_of_Crude_Oil_and_Petroleum_Products.csv",
+            "date_column": "Month",
             "quantity_column": "Net_Imports_of_Crude_Oil_and_Petroleum_Products_Thousand_Barrels_per_Day"
         },
         {
@@ -343,7 +343,7 @@
             "url": "https://www.policyuncertainty.com/wui_quarterly.html"
         },
         {
-            "fike_name": "Geopolitical_Risk_indicator_monthly",
+            "file_name": "Geopolitical_Risk_indicator_monthly",
             "frequency": "Monthly",
             "start_date": "01.01.1985",
             "end_date": "01.05.2023",
