@@ -33,3 +33,20 @@ decompose_and_plot_acf <- function(df, column, lag_max, path, frequency = 4) {
                                                     width = 7, height = 5, path = path)
 }
 
+
+# Function to perform ADF test
+perform_adf_analysis <- function(df, column) {
+    # Apply ADF test
+    adf_result <- adf.test(na.omit(df[[column]]))
+
+    # Create a dataframe with the results
+    results_df <- data.frame(
+        Column = column,
+        Test_Statistic = adf_result$statistic,
+        P_Value = adf_result$p.value,
+        Significance_Level_1 = ifelse(adf_result$p.value <= 0.01, "Yes", "No"),
+        Significance_Level_5 = ifelse(adf_result$p.value <= 0.05, "Yes", "No"),
+        Significance_Level_10 = ifelse(adf_result$p.value <= 0.1, "Yes", "No")
+    )
+    return(results_df)
+}
