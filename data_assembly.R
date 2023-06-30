@@ -32,7 +32,7 @@ frequency <- "Monthly"
 start_date <- "1990-01-01"
 end_date <- "2023-05-01"
 
-
+data_assembly <- F
 #######################################################################
 ###---------------------- Helper Functions -------------------------###
 #######################################################################
@@ -143,101 +143,111 @@ retrieve_and_merge_data <- function(file_names, start_date, end_date, frequency,
   return(merged_data)
 }
 
+if (data_assembly) {
 
-#######################################################################
-###---------------------- Oil Prices -------------------------------###
-#######################################################################
-# Initialize an empty data frame for oil prices
-WTI_oil_data <- data.frame()
-data <- retrieve_data("WTI_CrudeOil_Monthly", start_date, end_date, frequency)
-    if (!is.null(data)) {
-        WTI_oil_data <- rbind(WTI_oil_data, data)
-    }
-# Rename the columns by their positions
-names(WTI_oil_data)[1] <- "date"
-names(WTI_oil_data)[2] <- "WTI Crude Oil Price [USD/barrel]"
-# Save the data as an rda file and csv file
-save(WTI_oil_data, file = "Data/Rda/WTI_oil_data.rda")
-write.csv(WTI_oil_data, file = "Data/csv/WTI_oil_data.csv", row.names = FALSE)
-
-
-#######################################################################
-###---------------------- Supply & Demand --------------------------###
-#######################################################################
-supply_demand_file_names <- c("Weekly_U.S._Ending_Stocks_of_Crude_Oil",
-                              "U.S._Exports_of_Crude_Oil",
-                              "U.S._Field_Production_of_Crude_Oil",
-                              "Weekly_U.S._Product_Supplied_of_Petroleum_Products",
-                              "Weekly_U.S._Net_Imports_of_Crude_Oil_and_Petroleum_Products",
-                              "OPEC_Oil_Production","Kilian_index_monthly")
-supply_demand_data <- retrieve_and_merge_data(supply_demand_file_names, start_date, end_date, frequency, "supply_demand_data")
-
-#######################################################################
-###---------------------- Macroeconomic Factors --------------------###
-#######################################################################
-macroeconomic_file_names <- c("CPI_OECD_Monthly",
-                              "CPI_USA_Monthly",
-                              "UNRATE_USA",
-                              "UNRATE_EU",
-                              "Money_supply_M_USA",
-                              "Economic_policy_uncerainty_index_USA",
-                              "Economic_policy_uncerainty_index_EU",
-                              "GDP_EU_Monthly",
-                              "GDP_US_Monthly",
-                              "FEDFUNDS")
-macroeconomic_data <- retrieve_and_merge_data(macroeconomic_file_names, start_date, end_date, frequency, "macroeconomic_data")
-
-#######################################################################
-###---------------------- Financial Indicators ----------------------###
-#######################################################################
-financial_file_names <- c("S&P_500_Monthly",
-                          "MSCIWORLD",
-                          "STOXX600")
-financial_data <- retrieve_and_merge_data(financial_file_names, start_date, end_date, frequency, "financial_data")
-
-#######################################################################
-###---------------------- Commodity Prices -------------------------###
-#######################################################################
-commodities_file_names <- c("S&P_GSCI_Commodity_Index_Monthly_cleaned",
-                            "Gold_Futures_Historical_Monthly_cleaned",
-                            "Copper_Futures_Historical_Monthly_cleaned")
-commodities_data <- retrieve_and_merge_data(commodities_file_names, start_date, end_date, frequency, "commodities_data")
+    #######################################################################
+    ###---------------------- Oil Prices -------------------------------###
+    #######################################################################
+    # Initialize an empty data frame for oil prices
+    WTI_oil_data <- data.frame()
+    data <- retrieve_data("WTI_CrudeOil_Monthly", start_date, end_date, frequency)
+        if (!is.null(data)) {
+            WTI_oil_data <- rbind(WTI_oil_data, data)
+        }
+    # Rename the columns by their positions
+    names(WTI_oil_data)[1] <- "date"
+    names(WTI_oil_data)[2] <- "WTI Crude Oil Price [USD/barrel]"
+    # Save the data as an rda file and csv file
+    save(WTI_oil_data, file = "Data/Rda/WTI_oil_data.rda")
+    write.csv(WTI_oil_data, file = "Data/csv/WTI_oil_data.csv", row.names = FALSE)
 
 
-# Assemble all of the data into one data frame and save it as an rda and csv file
-# Merge all data frames together
-all_data <- Reduce(function(x, y) merge(x, y, by = "date", all = TRUE),
-                   list(WTI_oil_data, supply_demand_data, macroeconomic_data, financial_data, commodities_data))
+    #######################################################################
+    ###---------------------- Supply & Demand --------------------------###
+    # #######################################################################
+    supply_demand_file_names <- c("Weekly_U.S._Ending_Stocks_of_Crude_Oil",
+                                "U.S._Exports_of_Crude_Oil",
+                                "U.S._Field_Production_of_Crude_Oil",
+                                "Weekly_U.S._Product_Supplied_of_Petroleum_Products",
+                                "Monthly_U.S._Net_Imports_of_Crude_Oil_and_Petroleum_Products",
+                                "OPEC_Oil_Production","Kilian_index_monthly")
+    supply_demand_data <- retrieve_and_merge_data(supply_demand_file_names, start_date, end_date, frequency, "supply_demand_data")
 
-# Save as .rda
-save(all_data, file = "Data/Rda/all_data.rda")
+    #######################################################################
+    ###---------------------- Macroeconomic Factors --------------------###
+    #######################################################################
+    macroeconomic_file_names <- c("CPI_OECD_Monthly",
+                                "CPI_USA_Monthly",
+                                "UNRATE_USA",
+                                "UNRATE_EU",
+                                "Money_supply_M_USA",
+                                "Economic_policy_uncerainty_index_USA",
+                                "Economic_policy_uncerainty_index_EU",
+                                "GDP_EU_Monthly",
+                                "GDP_US_Monthly",
+                                "FEDFUNDS")
+    macroeconomic_data <- retrieve_and_merge_data(macroeconomic_file_names, start_date, end_date, frequency, "macroeconomic_data")
 
-# Save as .csv
-write.csv(all_data, file = "Data/csv/all_data.csv", row.names = FALSE)
+    #######################################################################
+    ###---------------------- Financial Indicators ----------------------###
+    #######################################################################
+    financial_file_names <- c("S&P_500_Monthly",
+                            "MSCIWORLD",
+                            "STOXX600")
+    financial_data <- retrieve_and_merge_data(financial_file_names, start_date, end_date, frequency, "financial_data")
+
+    #######################################################################
+    ###---------------------- Commodity Prices -------------------------###
+    #######################################################################
+    commodities_file_names <- c("S&P_GSCI_Commodity_Index_Monthly_cleaned",
+                                "Gold_Futures_Historical_Monthly_cleaned",
+                                "Copper_Futures_Historical_Monthly_cleaned")
+    commodities_data <- retrieve_and_merge_data(commodities_file_names, start_date, end_date, frequency, "commodities_data")
 
 
-#######################################################################
-# remove the columns that are not needed                              #
-# rename the columns of the data frame                                #
-#######################################################################
-# remove the columns that are not needed
-drops <- c("variance_Stocks_Crude_Oil [Thousand Barrels]",
-            "variance_US_Product_Supplied_of_Petroleum_Products [Thousand Barrels per Day]",
-            "variance_Net_Imports_of_Crude_Oil_and_Petroleum_Products [Thousand Barrels per Day]")
+    #######################################################################
+    ###---------------------- Political Factors ------------------------###
+    #######################################################################
+    political_file_names <- c("Geopolitical_Risk_indicator_monthly", "WUI_monthly")
+    political_data <- retrieve_and_merge_data(political_file_names, start_date, end_date, frequency, "political_data")
 
-all_data <- all_data[, !(names(all_data) %in% drops)]
+    # Assemble all of the data into one data frame and save it as an rda and csv file
+    # Merge all data frames together
+    all_data <- Reduce(function(x, y) merge(x, y, by = "date", all = TRUE),
+                    list(WTI_oil_data, supply_demand_data, macroeconomic_data, financial_data, commodities_data, political_data))
 
-# rename the columns of the data frame
-new_names <- c("date","oil_price", "oil_stock", "oil_export", "oil_production",
-            "product_supply", "product_net_import", "opec_production",
-            "killian_index", "cpi_oecd", "cpi_usa", "unrate_usa", "unrate_eu",
-            "epui_eu", "epui_usa", "gdp_eu", "gdp_usa", "federal_fund",
-            "sp500", "msci", "stoxx50", "gsci", "gold_price", "copper_future")
+    # Save as .rda
+    save(all_data, file = "Data/Rda/all_data.rda")
 
-names(all_data) <- new_names
+    # Save as .csv
+    write.csv(all_data, file = "Data/csv/all_data.csv", row.names = FALSE)
 
-# Save as .rda the cleaned data
-save(all_data, file = "Data/Rda/all_data_cleaned.rda")
 
-# Save as .csv the cleaned data
-write.csv(all_data, file = "Data/csv/all_data_cleaned.csv", row.names = FALSE)
+    #######################################################################
+    # remove the columns that are not needed                              #
+    # rename the columns of the data frame                                #
+    #######################################################################
+    # remove the columns that are not needed
+    drops <- c("variance_Stocks_Crude_Oil_Thousand_Barrels",
+                "variance_US_Product_Supplied_of_Petroleum_Products_Thousand_Barrels_per_Day",
+                "variance_Net_Imports_of_Crude_Oil_and_Petroleum_Products_Thousand_Barrels_per_Day")
+
+    all_data <- all_data[, !(names(all_data) %in% drops)]
+
+    # rename the columns of the data frame
+    new_names <- c("date","oil_price", "oil_stock", "oil_export", "oil_production",
+                "product_supply", "product_net_import", "opec_production",
+                "killian_index", "cpi_oecd", "cpi_usa", "unrate_usa", "unrate_eu",
+                "epui_eu", "epui_usa", "gdp_eu", "gdp_usa", "federal_fund",
+                "sp500", "msci", "stoxx50", "gsci", "gold_price", "copper_future", "geopolitical_risk", "wui")
+
+    names(all_data) <- new_names
+
+    # Save as .rda the cleaned data
+    save(all_data, file = "Data/Rda/all_data_cleaned.rda")
+
+    # Save as .csv the cleaned data
+    write.csv(all_data, file = "Data/csv/all_data_cleaned.csv", row.names = FALSE)
+
+    #######################################################################
+}
