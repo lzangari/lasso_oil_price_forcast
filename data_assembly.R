@@ -185,7 +185,8 @@ if (data_assembly) {
                                 "Economic_policy_uncerainty_index_EU",
                                 "GDP_EU_Monthly",
                                 "GDP_US_Monthly",
-                                "FEDFUNDS")
+                                "FEDFUNDS",
+                                "TB3MS")
     macroeconomic_data <- retrieve_and_merge_data(macroeconomic_file_names, start_date, end_date, frequency, "macroeconomic_data")
 
     #######################################################################
@@ -238,7 +239,7 @@ if (data_assembly) {
     new_names <- c("date","oil_price", "oil_stock", "oil_export", "oil_production",
                 "product_supply", "product_net_import", "opec_production",
                 "killian_index", "cpi_oecd", "cpi_usa", "unrate_usa", "unrate_eu",
-                "epui_eu", "epui_usa", "gdp_eu", "gdp_usa", "federal_fund",
+                "epui_eu", "epui_usa", "gdp_eu", "gdp_usa", "federal_fund", "tb3ms",
                 "sp500", "msci", "stoxx50", "gsci", "gold_price", "copper_future", "geopolitical_risk", "wui")
 
     names(all_data) <- new_names

@@ -180,7 +180,7 @@
     ]
 },
 {
-    "Name": "Federal Funds Rate",
+    "Name": "Macroeconomic Financial Indicators",
     "Type": "Interest Rate",
     "Description": "Interest Rates for Political Institutions",
     "URL": "https://fred.stlouisfed.org/series/FEDFUNDS",
@@ -196,6 +196,17 @@
             "path": "Data/InterestRates/FEDFUNDS.csv",
             "date_column": "DATE",
             "url": "https://fred.stlouisfed.org/series/FEDFUNDS"
+        },
+        {
+            "TB3MS": "3-Month Treasury Bill Minus Federal Funds Rate",
+            "frequency": "Monthly",
+            "start_date": "01.01.1934",
+            "end_date": "01.05.2023",
+            "date_format": "%Y/%m/%d",
+            "file_type": "csv",
+            "path": "Data/InterestRates/TB3MS.csv",
+            "date_column": "DATE",
+            "url": "https://fred.stlouisfed.org/series/TB3MS"
         }
     ]
 },
