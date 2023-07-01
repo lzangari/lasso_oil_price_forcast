@@ -240,7 +240,8 @@ if (data_assembly) {
                 "product_supply", "product_net_import", "opec_production",
                 "killian_index", "cpi_oecd", "cpi_usa", "unrate_usa", "unrate_eu",
                 "epui_eu", "epui_usa", "gdp_eu", "gdp_usa", "federal_fund", "tb3ms",
-                "sp500", "msci", "stoxx50", "gsci", "gold_price", "copper_future", "geopolitical_risk", "wui")
+                "sp500", "msci", "stoxx600", "gsci", "gold_price", "copper_future", "geopolitical_risk", "wui")
+
 
     names(all_data) <- new_names
 
