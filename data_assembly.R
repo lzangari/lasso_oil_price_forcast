@@ -66,6 +66,7 @@ read_data <- function(dataset) {
 filter_data <- function(data, dataset, start_date, end_date) {
 
     # # Convert the date column to Date type
+    print(dataset$file_name)
     data[[dataset$date_column]] <- as.Date(data[[dataset$date_column]], format = dataset$date_format)
     # Filter the data based on the start and end dates
     data <- data %>%
@@ -171,7 +172,8 @@ if (data_assembly) {
                                 "Weekly_U.S._Product_Supplied_of_Petroleum_Products",
                                 "Monthly_U.S._Net_Imports_of_Crude_Oil_and_Petroleum_Products",
                                 "OPEC_Oil_Production","Kilian_index_monthly")
-    supply_demand_data <- retrieve_and_merge_data(supply_demand_file_names, start_date, end_date, frequency, "supply_demand_data")
+    supply_demand_data <- retrieve_and_merge_data(supply_demand_file_names, start_date,
+                                                end_date, frequency, "supply_demand_data")
 
     #######################################################################
     ###---------------------- Macroeconomic Factors --------------------###
@@ -187,7 +189,8 @@ if (data_assembly) {
                                 "GDP_US_Monthly",
                                 "FEDFUNDS",
                                 "TB3MS")
-    macroeconomic_data <- retrieve_and_merge_data(macroeconomic_file_names, start_date, end_date, frequency, "macroeconomic_data")
+    macroeconomic_data <- retrieve_and_merge_data(macroeconomic_file_names, start_date,
+                                                    end_date, frequency, "macroeconomic_data")
 
     #######################################################################
     ###---------------------- Financial Indicators ----------------------###
@@ -195,7 +198,8 @@ if (data_assembly) {
     financial_file_names <- c("S&P_500_Monthly",
                             "MSCIWORLD",
                             "STOXX600")
-    financial_data <- retrieve_and_merge_data(financial_file_names, start_date, end_date, frequency, "financial_data")
+    financial_data <- retrieve_and_merge_data(financial_file_names, start_date,
+                                            end_date, frequency, "financial_data")
 
     #######################################################################
     ###---------------------- Commodity Prices -------------------------###
@@ -203,7 +207,8 @@ if (data_assembly) {
     commodities_file_names <- c("S&P_GSCI_Commodity_Index_Monthly_cleaned",
                                 "Gold_Futures_Historical_Monthly_cleaned",
                                 "Copper_Futures_Historical_Monthly_cleaned")
-    commodities_data <- retrieve_and_merge_data(commodities_file_names, start_date, end_date, frequency, "commodities_data")
+    commodities_data <- retrieve_and_merge_data(commodities_file_names, start_date,
+                                                end_date, frequency, "commodities_data")
 
 
     #######################################################################
@@ -215,7 +220,8 @@ if (data_assembly) {
     # Assemble all of the data into one data frame and save it as an rda and csv file
     # Merge all data frames together
     all_data <- Reduce(function(x, y) merge(x, y, by = "date", all = TRUE),
-                    list(WTI_oil_data, supply_demand_data, macroeconomic_data, financial_data, commodities_data, political_data))
+                    list(WTI_oil_data, supply_demand_data, macroeconomic_data,
+                    financial_data, commodities_data, political_data))
 
     # Save as .rda
     save(all_data, file = "Data/Rda/all_data.rda")
