@@ -1,6 +1,7 @@
 # Load necessary libraries
 library(ggplot2)
 library(forecast)
+library(lmtest)
 
 source("utils_plot.R")
 
@@ -13,19 +14,17 @@ decompose_and_plot_acf <- function(df, column, lag_max, path, frequency = 4) {
     # Convert the column to a time series object
     ts_data <- ts(df[[column]], frequency = frequency)
 
-    # plot the time series of ts_data
-    plot.ts(ts_data, main = paste("Time Series Plot for", column))
-    # Save the plot as svg file
-    ggsave(paste0(column, "ts_timeseries_plot.svg"), plot = plot.ts(ts_data), dpi = 300,
-                                                   width = 9, height = 5, path = plot_path)
-
-
     # Decompose the time series
     decomposed <- decompose(ts_data)
 
-    # Plot the decomposed time series and save the plot directly
-    ggsave(paste0(column, "_decomposed_plot.svg"), plot = plot(decomposed), dpi = 300,
-                                                    width = 9, height = 5, path = plot_path)
+    # plot the decomposed plot
+    svg(filename = paste0(plot_path, "/", paste0(column, "_residual_decompose_plot.svg")))
+    plot(decomposed$random)
+    dev.off()
+
+    # # Plot the decomposed time series and save the plot directly
+    # ggsave(paste0(column, "_decomposed_plot.svg"), plot = plot(decomposed), dpi = 300,
+    #                                                 width = 9, height = 5, path = plot_path)
 
     # calculating the 1 and 10 percent significance levels
     threshold_1 <- 2.58/sqrt(length(df[[column]]))  # 1% significance level
@@ -33,8 +32,8 @@ decompose_and_plot_acf <- function(df, column, lag_max, path, frequency = 4) {
     threshold_10 <- 1.645/sqrt(length(df[[column]]))  # 10% significance level
 
     legend_df <- data.frame(
-    y = c(NA, NA, NA),
-    color = c("1% significance level", "5% significance level", "10% significance level")
+        y = c(NA, NA, NA),
+        color = c("1% significance level", "5% significance level", "10% significance level")
     )
     # Plot the ACF of the residuals and add the significance levels and show it as a legend
     acf_plot_residual <- ggAcf(decomposed$random, lag.max = lag_max) +
@@ -50,10 +49,10 @@ decompose_and_plot_acf <- function(df, column, lag_max, path, frequency = 4) {
 
 
     # plot the forecasterrors of the residuals to check the residuals are normally distributed
-    plotForecastErrors(na.omit(decomposed$random))
+    plot_forecast_errors(na.omit(decomposed$random), column, plot_path)
     # Save the plot as svg file
-    ggsave(paste0(column, "_forecast_errors.svg"), plot = plotForecastErrors(decomposed$random), dpi = 300,
-                                                    width = 7, height = 5, path = plot_path)
+    # ggsave(paste0(column, "_forecast_errors.svg"), plot = plotForecastErrors(decomposed$random), dpi = 300,
+    #                                                 width = 7, height = 5, path = plot_path)
 
 
     # Plot the ACF of the trend
@@ -87,14 +86,17 @@ perform_adf_analysis <- function(df, column, indicator = "none") {
         P_Value = adf_result$p.value,
         Significance_Level_1 = ifelse(adf_result$p.value <= 0.01, "Yes", "No"),
         Significance_Level_5 = ifelse(adf_result$p.value <= 0.05, "Yes", "No"),
-        Significance_Level_10 = ifelse(adf_result$p.value <= 0.1, "Yes", "No")
+        Significance_Level_10 = ifelse(adf_result$p.value <= 0.1, "Yes", "No"),
+        lag_order = adf_result$parameter[[names(adf_result$parameter)[1]]]
     )
     return(results_df)
 }
 
 # Function to perform Breusch-Pagan test
-analysis_heteroscedacity <- function(indicator, predictor, df) {
-    model <- lm(indicator ~ predictor, data=df)
+analysis_heteroscedacity <- function(indicator, predictor_index, df,
+                                name_index) {
+    model <- lm(df[, name_index]~ df[, predictor_index])
+    #lm(indicator ~ predictor, data=df)
     # Breusch-Pagan test
     bp_test <- bptest(model)
     # create a dataframe with the results
