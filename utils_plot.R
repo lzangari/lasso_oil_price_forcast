@@ -1,5 +1,8 @@
 library(ggplot2)
 library(scales)
+library(gridExtra)
+library(gridSVG)
+library(grid)
 
 # Function to create a plot
 create_weekly_plot <- function(df, path, plot_name) {
@@ -60,7 +63,7 @@ create_monthly_plot <- function(df, path, y_column, plot_name) {
 }
 
 
-plotForecastErrors <- function(forecasterrors){
+plot_forecast_errors <- function(forecasterrors, column, path){
     # make a histogram of the forecast errors:
     mybinsize <- IQR(forecasterrors)/4
     mysd   <- sd(forecasterrors)
@@ -74,10 +77,27 @@ plotForecastErrors <- function(forecasterrors){
     if (mymax2 > mymax) { mymax <- mymax2 }
     # make a red histogram of the forecast errors, with the normally distributed data overlaid:
     mybins <- seq(mymin, mymax, mybinsize)
-    hist(forecasterrors, col="#0d8736", freq=FALSE, breaks=mybins)
+    # initiate the save plot
+    svg(filename = paste0(path, "/", paste0(column, "_residual_hist.svg")))
+    # create histrogram
+    hist(forecasterrors, col="#075234", freq=FALSE, breaks=mybins)
     # freq=FALSE ensures the area under the histogram = 1
     # generate normally distributed data with mean 0 and standard deviation mysd
     myhist <- hist(mynorm, plot=FALSE, breaks=mybins)
-    # plot the normal curve as a blue line on top of the histogram of forecast errors:
+    # plot the normal curve on top of the histogram of forecast errors:
+    hist(forecasterrors, col="#075234", freq=FALSE, breaks=mybins)
+    myhist <- hist(mynorm, plot=FALSE, breaks=mybins)
     points(myhist$mids, myhist$density, type="l", col="#ffae00", lwd=2)
+    dev.off()
+}
+
+create_svg_from_table <- function(results, name, table_width = 9, table_heigh = 7){
+    # assemble the table
+    result_table <- do.call(rbind, results)
+    table_grob <- tableGrob(result_table, theme = ttheme_default(base_size = 8, base_line_size = 0.5))
+    grDevices::svg(name, width = table_width, height = table_heigh)
+    grid.newpage()
+    grid.draw(table_grob)
+    grid.export(name)
+    dev.off()
 }
