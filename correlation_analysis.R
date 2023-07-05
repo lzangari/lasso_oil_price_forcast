@@ -12,7 +12,8 @@ decompose_and_plot_acf <- function(df, column, lag_max, path, frequency = 4) {
         dir.create(plot_path)
     }
     # Convert the column to a time series object
-    ts_data <- ts(df[[column]], frequency = frequency)
+    # df[[column]] <- ifelse(df[[column]] > 0, log(df[[column]]), NA)
+    ts_data <- ts(as.numeric(df[[column]]), frequency = frequency)
 
     # Decompose the time series
     decomposed <- decompose(ts_data)
@@ -86,17 +87,16 @@ perform_adf_analysis <- function(df, column, indicator = "none") {
         P_Value = adf_result$p.value,
         Significance_Level_1 = ifelse(adf_result$p.value <= 0.01, "Yes", "No"),
         Significance_Level_5 = ifelse(adf_result$p.value <= 0.05, "Yes", "No"),
-        Significance_Level_10 = ifelse(adf_result$p.value <= 0.1, "Yes", "No"),
-        lag_order = adf_result$parameter[[names(adf_result$parameter)[1]]]
+        Significance_Level_10 = ifelse(adf_result$p.value <= 0.1, "Yes", "No")
+        # lag_order = adf_result$parameter[[names(adf_result$parameter)[1]]]
     )
     return(results_df)
 }
 
 # Function to perform Breusch-Pagan test
-analysis_heteroscedacity <- function(indicator, predictor_index, df,
-                                name_index) {
-    model <- lm(df[, name_index]~ df[, predictor_index])
-    #lm(indicator ~ predictor, data=df)
+analysis_heteroscedacity <- function(indicator, predictor, df) {
+    model <- lm(df[[indicator]] ~ df[[predictor]])
+    #lm(df[, name_index]~ df[, predictor_index])
     # Breusch-Pagan test
     bp_test <- bptest(model)
     # create a dataframe with the results
