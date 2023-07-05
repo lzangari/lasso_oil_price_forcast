@@ -94,6 +94,28 @@ plot_forecast_errors <- function(forecasterrors, column, path){
 create_svg_from_table <- function(results, name, table_width = 9, table_heigh = 7){
     # assemble the table
     result_table <- do.call(rbind, results)
+
+    # # Round numeric columns to 3 decimal places
+    # numeric_cols <- sapply(result_table, is.numeric)
+    # result_table[, numeric_cols] <- round(result_table[, numeric_cols], 3)
+    # # Transpose the table
+    # result_table <- as.data.frame(t(result_table))
+
+    table_grob <- tableGrob(result_table, theme = ttheme_default(base_size = 8, base_line_size = 0.5))
+    grDevices::svg(name, width = table_width, height = table_heigh)
+    grid.newpage()
+    grid.draw(table_grob)
+    grid.export(name)
+    dev.off()
+}
+
+create_svg_from_transformed_table <- function(results, name, table_width = 9, table_heigh = 7){
+    # assemble the table
+    result_table <- do.call(rbind, results)
+
+    # Transpose the table
+    result_table <- as.data.frame(t(result_table))
+
     table_grob <- tableGrob(result_table, theme = ttheme_default(base_size = 8, base_line_size = 0.5))
     grDevices::svg(name, width = table_width, height = table_heigh)
     grid.newpage()
