@@ -46,28 +46,35 @@ set.seed(42)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
 ```
 
+# Glossary {-}
 
+Foo
 
-# Methods
+:   description of foo
+
+Bar
+
+:   descirption of bar
+
+# Introduction
 We report how we determined our sample size, all data exclusions (if any), all manipulations, and all measures in the study. <!-- 21-word solution (Simmons, Nelson & Simonsohn, 2012; retrieved from http://ssrn.com/abstract=2160588) -->
 
-## Participants
-Here comes Participants
-
-## Material
+# Literature Review
 Here comes Materilas
 
-## Procedure
+# Data and Methodology
+## Data
+## Methodology
 Here comes Procedure
 
-## Data analysis
-Here comes data analysis
-
 # Results
-Here comes results
+Here comes data analysis
 
 # Discussion
 Here comes discussion
+
+# Conclusion
+Here comes conclusion
 
 \listoffigures
 \listoftables

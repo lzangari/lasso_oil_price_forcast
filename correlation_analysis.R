@@ -50,7 +50,8 @@ decompose_and_plot_acf <- function(df, column, lag_max, path, frequency = 4) {
 
 
     # plot the forecasterrors of the residuals to check the residuals are normally distributed
-    plot_forecast_errors(na.omit(decomposed$random), column, plot_path)
+    #plot_forecast_errors(na.omit(decomposed$random), column, plot_path)
+
     # Save the plot as svg file
     # ggsave(paste0(column, "_forecast_errors.svg"), plot = plotForecastErrors(decomposed$random), dpi = 300,
     #                                                 width = 7, height = 5, path = plot_path)

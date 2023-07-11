@@ -8,6 +8,7 @@ library(forecast)
 library(gridExtra)
 library(gridSVG)
 library(grid)
+library(xtable)
 
 source("data_assembly.R")
 source("utils_plot.R")
@@ -108,17 +109,28 @@ short_names <- list("oil_price" = "Oil Price",
                     "one_lag_oil_return_price" = "Retrun price [1 lag]")
 # do analysis for each data
 adf_results <- list()
+adf_results_df <- NULL
 hetero_results <- list()
+hetero_results_df <- NULL
+
 for (name_index in 2:length(names(df))){
     result <- analysis_stationary(df = df, save_plots = save_plots,
                 y_column = names(df)[name_index], plot_name = plot_names[[names(df)[name_index]]],
                     indicator = short_names[[names(df)[name_index]]])
 
     adf_results[[name_index]] <- result[[1]]
+    adf_results_df <- rbind(adf_results_df, result[[1]])
     hetero_results[[name_index]] <- result[[2]]
+    hetero_results_df <- rbind(hetero_results_df, result[[2]])
 
 }
 name <- paste0(save_plots, "/monthly_column_adf_table.svg")
+
+# convert the dataframe to latex table and save it to .tex file
+adf_results_tex <- xtable(adf_results_df)#, digits = 4)
+print(adf_results_tex, type = "latex",
+        file = paste0(save_plots, "/monthly_column_adf_table.tex"),
+        include.rownames = FALSE)
 
 # assemble the table for adf_table
 create_svg_from_table(results = adf_results,
