@@ -36,15 +36,15 @@ weekly_data <- function(name) {
     # return: the data frame of the weekly data
     dataset <- find_dataset(name, "Weekly")
     data <- read_data(dataset)
-    data <- filter_data(data, dataset, "1990-01-01", "2023-05-01")
+    data <- filter_data(data, dataset, "1989-01-01", "2023-05-01")
     return(data)
 }
 
 # create a list of the data names and plot names
-data_names <- c("Weekly_U.S._Ending_Stocks_of_Crude_Oil",
-                "Weekly_U.S._Product_Supplied_of_Petroleum_Products")
-plot_names <- list("Weekly_U.S._Ending_Stocks_of_Crude_Oil" = "U.S. Ending Stocks of Crude Oil",
-                   "Weekly_U.S._Product_Supplied_of_Petroleum_Products" = "U.S. Product Supplied")
+data_names <- c("Weekly_U.S._Ending_Stocks_of_Crude_Oil")
+               # "Weekly_U.S._Product_Supplied_of_Petroleum_Products")
+plot_names <- list("Weekly_U.S._Ending_Stocks_of_Crude_Oil" = "U.S. Ending Stocks of Crude Oil")
+                   #"Weekly_U.S._Product_Supplied_of_Petroleum_Products" = "U.S. Product Supplied")
 
 # do analysis for each data
 adf_results <- list()

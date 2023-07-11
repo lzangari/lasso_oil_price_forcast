@@ -76,22 +76,22 @@
 
         },
         {
-            "file_name": "Weekly_U.S._Product_Supplied_of_Petroleum_Products",
-            "frequency": "Weekly",
-            "start_date": "11.09.1990",
-            "end_date": "16.06.2023",
-            "date_format": "%m/%d/%Y",
+            "file_name": "U.S._Product_Supplied_of_Crude_Oil_and_Petroleum_Products_monthly",
+            "frequency": "Monthly",
+            "start_date": "01.01.1981",
+            "end_date": "01.04.2023",
+            "date_format": "%d/%m/%Y",
             "file_type": "csv",
-            "path": "Data/GlobalOilProduction/Weekly_U.S._Product_Supplied_of_Petroleum_Products.csv",
-            "date_column": "Week",
-            "quantity_column": "US_Product_Supplied_of_Petroleum_Products_Thousand_Barrels_per_Day"
+            "path": "Data/GlobalOilProduction/U.S._Product_Supplied_of_Crude_Oil_and_Petroleum_Products_monthly.csv",
+            "date_column": "Month",
+            "quantity_column": "US_Product_Supplied_of_Crude_Oil_and_Petroleum_Products_Thousand_Barrels"
         },
         {
             "file_name": "Monthly_U.S._Net_Imports_of_Crude_Oil_and_Petroleum_Products",
             "frequency": "Monthly",
-            "start_date": "01.02.1991",
-            "end_date": "01.06.2023",
-            "date_format": "%m/%d/%Y",
+            "start_date": "01.01.1973",
+            "end_date": "01.04.2023",
+            "date_format": "%d/%m/%Y",
             "file_type": "csv",
             "path": "Data/GlobalOilProduction/Monthly_U.S._Net_Imports_of_Crude_Oil_and_Petroleum_Products.csv",
             "date_column": "Month",
@@ -117,7 +117,7 @@
     "Citation": "",
     "Datasets":[
         {
-            "file_name": "GDP_EU_Monthly",
+            "file_name": "GDP_EU_Monthly_old",
             "frequency": "Monthly",
             "start_date": "01.01.1995",
             "end_date": "01.01.2023",
@@ -126,6 +126,17 @@
             "path": "Data/GDP/GDP_EU_Monthly.csv",
             "date_column": "DATE",
             "url": "https://fred.stlouisfed.org/series/CPMNACSCAB1GQEU272020"
+        },
+        {
+            "file_name": "GDP_EU_Monthly",
+            "frequency": "Monthly",
+            "start_date": "01.03.1960",
+            "end_date": "01.08.2022",
+            "date_format": "%Y/%m/%d",
+            "file_type": "csv",
+            "path": "Data/GDP/GDP_EU_index_monthly.csv",
+            "date_column": "DATE",
+            "url": "https://fred.stlouisfed.org/series/EA19LORSGPORIXOBSAM"
         },
         {
             "file_name": "GDP_US_Monthly",
