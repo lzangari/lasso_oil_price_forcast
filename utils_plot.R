@@ -240,9 +240,25 @@ plot_actual_vs_predicted <- function(predictions_df, window, horizon, path) {
     # save the plot
     plot_path <- paste0(path, "/actual_vs_predicted")
     create_dir(plot_path)
-    ggsave(filename = paste0(plot_path, "/model_size_window_", window, "_horizon_",
-                                            horizon, ".png"), plot = p)
+    ggsave(filename = paste0(plot_path, "/truth_vs_predicted_window_", window, "_horizon_",
+                                            horizon, ".png"), plot = p, width = 10)
 }
 
 
-# ggsave(filename = paste0("plots/actual_vs_predicted_window_", window, "_horizon_", horizon, ".png"), plot = p)
+plot_line_actual_vs_predicted <- function(predictions_df, window, horizon, path){
+    # create the plot
+    p <- ggplot(predictions_df, aes(x = Date)) +
+    geom_line(aes(y = Truth, colour = "Actual"), size = 0.75) +
+    geom_line(aes(y = Prediction, colour = "Predicted"), size = 0.5, alpha = 0.8) +
+    theme_minimal() +
+    scale_color_manual(values = c("Actual" = "#163925", "Predicted" = "#ff8000")) +
+    labs(x = "Date", y = "Monthly crude oil return (%)",
+         title = paste("Actual and Predicted over time (Window:", window, ", Horizon:", horizon, ")"),
+         color = "Legend") +
+    theme(legend.position = "bottom")
+    # save the plot
+    plot_path <- paste0(path, "/prediction_performance")
+    create_dir(plot_path)
+    ggsave(filename = paste0(plot_path, "/monthly_performance_window_", window, "_horizon_",
+                                            horizon, ".png"), plot = p, width = 10)
+}
