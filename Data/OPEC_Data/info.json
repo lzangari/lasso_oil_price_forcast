@@ -1,0 +1,306 @@
+{
+    "T11": {
+      "file_name": "T11",
+      "content": "OPEC Members' facts and figures",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T11.xlsx"
+    },
+    "T12": {
+      "file_name": "T12",
+      "content": "OPEC Members' crude oil production allocations",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T12.xlsx"
+    },
+    "T21": {
+      "file_name": "T21",
+      "content": "OPEC Members' population",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T21.xlsx"
+    },
+    "T22": {
+      "file_name": "T22",
+      "content": "OPEC Members' GDP at current market prices",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T22.xlsx"
+    },
+    "T23": {
+      "file_name": "T23",
+      "content": "OPEC Members' real GDP growth rates PPP based weights",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T23.xlsx"
+    },
+    "T24": {
+      "file_name": "T24",
+      "content": "OPEC Members' values of exports",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T24.xlsx"
+    },
+    "T25": {
+      "file_name": "T25",
+      "content": "OPEC Members' values of petroleum exports",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T25.xlsx"
+    },
+    "T26": {
+      "file_name": "T26",
+      "content": "OPEC Members' values of imports",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T26.xlsx"
+    },
+    "T27": {
+      "file_name": "T27",
+      "content": "Current account balances in OPEC Members",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T27.xlsx"
+    },
+    "T31": {
+      "file_name": "T31",
+      "content": "World proven crude oil reserves by country",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T31.xlsx"
+    },
+    "T32": {
+      "file_name": "T32",
+      "content": "Active rigs by country",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T32.xlsx"
+    },
+    "T33": {
+      "file_name": "T33",
+      "content": "Wells completed in OPEC Members",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T33.xlsx"
+    },
+    "T34": {
+      "file_name": "T34",
+      "content": "Daily and cumulative crude oil production in OPEC Members",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T34.xlsx"
+    },
+    "T35": {
+      "file_name": "T35",
+      "content": "World crude oil production by country",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T35.xlsx"
+    },
+    "T36": {
+      "file_name": "T36",
+      "content": "Non-OPEC oil supply and OPEC NGLs",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T36.xlsx"
+    },
+    "T37": {
+      "file_name": "T37",
+      "content": "World biofuel production",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T37.xlsx"
+    },
+    "T41": {
+      "file_name": "T41",
+      "content": "Refinery capacity in OPEC Members by company and location",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T41.xlsx"
+    },
+    "T42": {
+      "file_name": "T42",
+      "content": "World refinery capacity by country",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T42.xlsx"
+    },
+    "T43": {
+      "file_name": "T43",
+      "content": "World refinery throughput by country",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T43.xlsx"
+    },
+    "T44": {
+      "file_name": "T44",
+      "content": "Output of petroleum products in OPEC Members",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T44.xlsx"
+    },
+    "T45": {
+      "file_name": "T45",
+      "content": "World output of petroleum products by country",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T45.xlsx"
+    },
+    "T46": {
+      "file_name": "T46",
+      "content": "Oil demand by main petroleum product in OPEC Members",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T46.xlsx"
+    },
+    "T47": {
+      "file_name": "T47",
+      "content": "World oil demand by country",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T47.xlsx"
+    },
+    "T48": {
+      "file_name": "T48",
+      "content": "World oil demand by main petroleum product and region",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T48.xlsx"
+    },
+    "T51": {
+      "file_name": "T51",
+      "content": "OPEC Members' crude oil exports by destination",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T51.xlsx"
+    },
+    "T52": {
+      "file_name": "T52",
+      "content": "World crude oil exports by country",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T52.xlsx"
+    },
+    "T53": {
+      "file_name": "T53",
+      "content": "World exports of petroleum products by country",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T53.xlsx"
+    },
+    "T54": {
+      "file_name": "T54",
+      "content": "World exports of petroleum products by main petroleum product and region",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T54.xlsx"
+    },
+    "T55": {
+      "file_name": "T55",
+      "content": "World exports of crude oil and petroleum products by country",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T55.xlsx"
+    },
+    "T56": {
+      "file_name": "T56",
+      "content": "World imports of crude oil by country",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T56.xlsx"
+    },
+    "T57": {
+      "file_name": "T57",
+      "content": "World imports of petroleum products by country",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T57.xlsx"
+    },
+    "T58": {
+      "file_name": "T58",
+      "content": "World imports of petroleum products by main petroleum product and region",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T58.xlsx"
+    },
+    "T59": {
+      "file_name": "T59",
+      "content": "World imports of crude oil and petroleum products by country",
+      "frequency": "Yearly",
+      "date_format": "%y",
+      "file_type": "xlsx",
+      "path": "Data/OPEC_Data/T59.xlsx"
+    },
+    "T61": {
+      "file_name": "T61",
+      "content": "Average spot freight rates by vessel category",
+      "frequency": "Yearly",
+      "date_format": "%y",
+        "file_type": "xlsx",
+        "path": "Data/OPEC_Data/T61.xlsx"
+    },
+    "T62": {
+      "file_name": "T62",
+      "content": "Dirty tanker spot freight rates",
+      "frequency": "Yearly",
+      "date_format": "%y",
+        "file_type": "xlsx",
+        "path": "Data/OPEC_Data/T62.xlsx"
+    },
+    "T63": {
+      "file_name": "T63",
+      "content": "Clean tanker spot freight rates",
+      "frequency": "Yearly",
+      "date_format": "%y",
+        "file_type": "xlsx",
+        "path": "Data/OPEC_Data/T63.xlsx"
+    },
+    "T71": {
+      "file_name": "T71",
+      "content": "OPEC Reference Basket (ORB) and corresponding component's spot prices",
+      "frequency": "Monthly",
+      "date_format": "%b-%y",
+        "file_type": "xlsx",
+        "path": "Data/OPEC_Data/T71.xlsx"
+    },
+    "T72": {
+      "file_name": "T72",
+      "content": "Selected spot crude oil prices",
+      "frequency": "Monthly",
+      "date_format": "%b-%y",
+        "file_type": "xlsx",
+        "path": "Data/OPEC_Data/T72.xlsx"
+    }
+}
