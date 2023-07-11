@@ -128,6 +128,30 @@ create_svg_from_table(results = adf_results,
 create_svg_from_table(results = hetero_results,
                 name = paste0(save_plots, "/monthly_column_bptest_table.svg"))
 
+#######################################################################
+###----------- data distribution before transformation -------------###
+#######################################################################
+# histogram of the data
+# Loop through all column names in the dataframe
+for (column_name in names(df)[-1]) {
+    # Skip the 'one_lag_oil_price' column
+    if (column_name != "one_lag_oil_return_price") {
+        # Create a histogram for the column
+        p <- ggplot(df, aes_string(column_name)) +
+            geom_histogram(aes(y = ..density..), bins = 30, fill = "#163925", alpha = 0.5) +
+            geom_density(color = "#163925") +
+            labs(x = column_name, y = "Density")
+
+
+        # # # Add a scatter plot of 'one_lag_oil_price'
+        # p <- p + geom_point(aes_string(x = column_name, y = "original_one_lag_oil_return_price"), color = "red") +
+        #     labs(title = paste("Histogram of", column_name, "with one_lag_oil_price overlay"))
+
+        # Save the plot
+        ggsave(paste0(column_name, "_histogram.png"), plot = p, path = paste0((save_plots), "/histogram_of_data_before_transformation"))
+        #ggsave(paste0(column_name, "_histogram.svg"), plot = p, path = paste0((save_plots), "/histogram_of_data"))
+    }
+}
 
 #######################################################################
 ###--------------------- Apply transformation ---------------------###
@@ -137,16 +161,16 @@ original_data <- c("one_lag_oil_return_price",
 
 one_lag_data <- c("oil_stock", "product_net_import", "epui_eu", "epui_usa",
                    "opec_production", "killian_index", "gdp_eu",
-                   "gsci", "gold_price", "copper_future")
-ong_lag_log_data <- c("gdp_usa")
+                   "gsci", "gold_price", "copper_future", "federal_fund","unrate_eu")
+#ong_lag_log_data <- c("gdp_usa")
 
 two_lags_data <- c("product_supply", "cpi_eocd", "cpi_usa", "sp500", "msci",
                      "wui")
 
 three_lags_log_data <- c("oil_export")
 
-twelve_lag_log_data <- c("unrate_usa",
-                        "tb3ms", "stoxx600", "federal_fund", "unrate_eu", "oil_production")
+twelve_lag_log_data <- c("unrate_usa","tb3ms", "stoxx600",
+                        "oil_production", "gdp_usa") #"federal_fund","unrate_eu",
 
 remove_column <- c("oil_price")
 
@@ -177,9 +201,6 @@ for (column_name in df_names) {
         } else if (column_name %in% three_lags_log_data) {
             new_column <- paste0("three_lag_log_", column_name)
             df[[new_column]] <- c(NA, NA, NA, diff(log(df[[column_name]]), lag=3))
-        } else if (column_name %in% ong_lag_log_data) {
-            new_column <- paste0("one_lag_log_", column_name)
-            df[[new_column]] <- c(NA, diff(log(df[[column_name]]), lag=1))
         }
         # apply statistical analysis
         result_stock <- analysis_stationary(df = df, save_plots = save_plots,
