@@ -69,49 +69,50 @@ write.csv(summary_stats, "C:/Repositories/lasso_oil_price_forcast/Data/csv/summa
 ###------------------- Transformed data study ----------------------###
 #######################################################################
 
-# histogram of the data 
+# histogram of the data
 # Loop through all column names in the dataframe
 for (column_name in names(df)[-1]) {
     # Skip the 'one_lag_oil_price' column
     if (column_name != "original_one_lag_oil_return_price") {
         # Create a histogram for the column
         p <- ggplot(df, aes_string(column_name)) +
-            geom_histogram(aes(y = ..density..), bins = 30, fill = "skyblue", alpha = 0.5) +
-            geom_density(color = "blue") +
-            labs(x = column_name, y = "Density") +
-            
+            geom_histogram(aes(y = ..density..), bins = 30, fill = "#163925", alpha = 0.5) +
+            geom_density(color = "#163925") +
+            labs(x = column_name, y = "Density")
 
-        # # Add a scatter plot of 'one_lag_oil_price'
+
+        # # # Add a scatter plot of 'one_lag_oil_price'
         # p <- p + geom_point(aes_string(x = column_name, y = "original_one_lag_oil_return_price"), color = "red") +
         #     labs(title = paste("Histogram of", column_name, "with one_lag_oil_price overlay"))
 
         # Save the plot
-        ggsave(paste0(column_name, "_histogram.svg"), plot = p)
+        ggsave(paste0(column_name, "_histogram.png"), plot = p, path = paste0((save_plots), "/histogram_of_data"))
+        #ggsave(paste0(column_name, "_histogram.svg"), plot = p, path = paste0((save_plots), "/histogram_of_data"))
     }
 }
 
-# line plot over yearly change versus price
-# Convert the 'date' column to Date class
-df$date <- as.Date(df$date)
+# # line plot over yearly change versus price
+# # Convert the 'date' column to Date class
+# df$date <- as.Date(df$date)
 
-# Create a new column for the year
-df$year <- format(df$date, "%Y")
+# # Create a new column for the year
+# df$year <- format(df$date, "%Y")
 
-# Loop through all column names in the dataframe
-for (column_name in names(df)[-1]) {
-    # Skip the 'date' and 'year' columns
-    if (column_name != "date" && column_name != "year" && column_name != "original_one_lag_oil_return_price") {
-        # Create a line plot for the column
-        p <- ggplot(df, aes_string(x = "year", y = column_name)) +
-            geom_line(color = "#114e34") +
-            labs(x = "Year", y = column_name) +
-            theme(axis.text.x = element_text(angle = 90))
+# # Loop through all column names in the dataframe
+# for (column_name in names(df)[-1]) {
+#     # Skip the 'date' and 'year' columns
+#     if (column_name != "date" && column_name != "year" && column_name != "original_one_lag_oil_return_price") {
+#         # Create a line plot for the column
+#         p <- ggplot(df, aes_string(x = "year", y = column_name)) +
+#             geom_line(color = "#114e34") +
+#             labs(x = "Year", y = column_name) +
+#             theme(axis.text.x = element_text(angle = 90))
 
-        # Add a scatter plot of 'original_one_lag_oil_return_price'
-        p <- p + geom_point(aes_string(x = "year", y = "original_one_lag_oil_return_price"), color = "#b98c13") +
-            labs(title = paste("Yearly trend of", column_name, "with return price overlay"))
+#         # Add a scatter plot of 'original_one_lag_oil_return_price'
+#         p <- p + geom_point(aes_string(x = "year", y = "original_one_lag_oil_return_price"), color = "#b98c13") +
+#             labs(title = paste("Yearly trend of", column_name, "with return price overlay"))
 
-        # Save the plot
-        ggsave(paste0(column_name, "_yearly_trend.svg"), plot = p)
-    }
-}
+#         # Save the plot
+#         ggsave(paste0(column_name, "_yearly_trend.svg"), plot = p)
+#     }
+# }
