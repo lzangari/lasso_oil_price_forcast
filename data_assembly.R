@@ -29,10 +29,10 @@ Sys.setlocale("LC_TIME", "C")
 # Read the data_info json file
 data_info <- jsonlite::read_json("Data/data_info.json")
 frequency <- "Monthly"
-start_date <- "1990-01-01"
+start_date <- "1989-01-01"
 end_date <- "2023-05-01"
 
-data_assembly <- F
+data_assembly <- T
 #######################################################################
 ###---------------------- Helper Functions -------------------------###
 #######################################################################
@@ -169,7 +169,7 @@ if (data_assembly) {
     supply_demand_file_names <- c("Weekly_U.S._Ending_Stocks_of_Crude_Oil",
                                 "U.S._Exports_of_Crude_Oil",
                                 "U.S._Field_Production_of_Crude_Oil",
-                                "Weekly_U.S._Product_Supplied_of_Petroleum_Products",
+                                "U.S._Product_Supplied_of_Crude_Oil_and_Petroleum_Products_monthly",
                                 "Monthly_U.S._Net_Imports_of_Crude_Oil_and_Petroleum_Products",
                                 "OPEC_Oil_Production","Kilian_index_monthly")
     supply_demand_data <- retrieve_and_merge_data(supply_demand_file_names, start_date,
