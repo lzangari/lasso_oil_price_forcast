@@ -4,12 +4,15 @@ library(gridExtra)
 library(gridSVG)
 library(grid)
 
+# set Working Directory
+wd <- file.path(getwd())
+setwd(wd)
 
 # create directory if it does not exis
 create_dir <- function(path) {
     # create a new directory if it does not exist
     if (!dir.exists(path)) {
-        dir.create(path)
+        dir.create(path, recursive = TRUE)
     }
 }
 
@@ -33,6 +36,7 @@ create_weekly_plot <- function(df, path, plot_name) {
 
     # Save the plot as svg file
     ggsave(paste0(y_column, "_timeseries_plot.svg"), p1, path = path)
+
 }
 
 # function to create the monthly plot
@@ -68,6 +72,7 @@ create_monthly_plot <- function(df, path, y_column, plot_name) {
 
     # Save the plot as svg file
     ggsave(paste0(y_column, "_timeseries_plot.svg"), p1, path = plot_path)
+
 }
 
 # function to get the plot for the residuals
@@ -96,7 +101,7 @@ plot_forecast_errors <- function(forecasterrors, column, path){
     hist(forecasterrors, col="#075234", freq=FALSE, breaks=mybins)
     myhist <- hist(mynorm, plot=FALSE, breaks=mybins)
     points(myhist$mids, myhist$density, type="l", col="#ffae00", lwd=2)
-    dev.off()
+
 }
 
 # function to save the plots as svg files
@@ -152,8 +157,12 @@ barplot_model_coefs <- function(cvfit, predictor_names, window, horizon) {
         coord_flip() +
         labs(x = "Variable", y = "Coefficient",
              title = paste("Lasso Coefficients (Window:", window, ", Horizon:", horizon, ")"))
+    # save the plot
+    plot_path <- paste0(path, "/bar_plot_coefficients")
+    create_dir(plot_path)
+    ggsave(filename = paste0(plot_path, "/monthly_coeff_window_", window, "_horizon_",
+                                            horizon, ".png"), plot = p)
 
-    return(p)
 }
 
 
@@ -177,6 +186,7 @@ plot_coef_heatmap <- function(coefs, window, horizon, path) {
     # remove row for intercept
     df <- df[df$Variable != "(Intercept)", ]
 
+
     # create the plot
     p <- ggplot(df, aes(x = Date, y = Variable)) +
         geom_tile(aes(fill = Coefficients)) +
@@ -189,6 +199,12 @@ plot_coef_heatmap <- function(coefs, window, horizon, path) {
     create_dir(plot_path)
     ggsave(filename = paste0(plot_path, "/heatmap_coefficients_window_", window, "_horizon_",
                                             horizon, ".png"), plot = p)
+    data_path <- paste0(path, "/coefficients_csv")
+    create_dir(data_path)
+    write.csv(df, file = paste0(data_path, "/coefficients_window_", window, "_horizon_",
+                                            horizon, ".csv"), row.names = FALSE)
+    return(df)
+
 }
 
 
@@ -211,6 +227,7 @@ plot_model_size <- function(coefs, window, horizon, path) {
         df <- rbind(df, model_size_df)
     }
 
+
     # create the plot
     p <- ggplot(df, aes(x = Date, y = ModelSize)) +
             geom_line(color = "#163925") +
@@ -223,13 +240,21 @@ plot_model_size <- function(coefs, window, horizon, path) {
     create_dir(plot_path)
     ggsave(filename = paste0(plot_path, "/model_size_window_", window, "_horizon_",
                                             horizon, ".png"), plot = p)
-    }
+    data_path <- paste0(path, "/model_size_csv")
+    create_dir(data_path)
+    write.csv(df, file = paste0(data_path, "/model_size_window_", window, "_horizon_",
+                                            horizon, ".csv"), row.names = FALSE)
+    return(df)
+}
 
 # function to plot actual vs. predicted values
 plot_actual_vs_predicted <- function(predictions_df, window, horizon, path) {
 
+    # filter the data for the specified window and horizon
+    data <- subset(predictions_df, Window == window & Horizon == horizon)
+    #predictions_df[predictions_df$Window == window & predictions_df$Horizon == horizon, ]
     # create the plot
-    p <- ggplot(predictions_df, aes(x = Truth, y = Prediction)) +
+    p <- ggplot(data, aes(x = Truth, y = Prediction)) +
     geom_point(alpha = 0.5) +
     geom_abline(slope = 1, intercept = 0, color = "#760f08") +
     coord_equal() +
@@ -242,23 +267,28 @@ plot_actual_vs_predicted <- function(predictions_df, window, horizon, path) {
     create_dir(plot_path)
     ggsave(filename = paste0(plot_path, "/truth_vs_predicted_window_", window, "_horizon_",
                                             horizon, ".png"), plot = p, width = 10)
+
 }
 
 
 plot_line_actual_vs_predicted <- function(predictions_df, window, horizon, path){
+    # filter the data for the specified window and horizon
+    data <- subset(predictions_df, Window == window & Horizon == horizon)
     # create the plot
-    p <- ggplot(predictions_df, aes(x = Date)) +
-    geom_line(aes(y = Truth, colour = "Actual"), size = 0.75) +
-    geom_line(aes(y = Prediction, colour = "Predicted"), size = 0.5, alpha = 0.8) +
-    theme_minimal() +
-    scale_color_manual(values = c("Actual" = "#163925", "Predicted" = "#ff8000")) +
-    labs(x = "Date", y = "Monthly crude oil return (%)",
-         title = paste("Actual and Predicted over time (Window:", window, ", Horizon:", horizon, ")"),
-         color = "Legend") +
-    theme(legend.position = "bottom")
+    data$Date <- as.Date(data$Date)
+    p <- ggplot(data, aes(x = Date)) +
+        geom_line(aes(y = Truth, colour = "Actual"), size = 0.75) +
+        geom_line(aes(y = Prediction, colour = "Predicted"), size = 0.5, alpha = 0.8) +
+        theme_minimal() +
+        scale_color_manual(values = c("Actual" = "#163925", "Predicted" = "#ff8000")) +
+        labs(x = "Date", y = "Monthly crude oil return (%)",
+            title = paste("Actual and Predicted over time (Window:", window, ", Horizon:", horizon, ")"),
+            color = "Legend") +
+        theme(legend.position = "bottom")
     # save the plot
     plot_path <- paste0(path, "/prediction_performance")
     create_dir(plot_path)
     ggsave(filename = paste0(plot_path, "/monthly_performance_window_", window, "_horizon_",
                                             horizon, ".png"), plot = p, width = 10)
+
 }
