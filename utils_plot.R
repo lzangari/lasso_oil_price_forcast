@@ -4,7 +4,17 @@ library(gridExtra)
 library(gridSVG)
 library(grid)
 
-# Function to create a plot
+
+# create directory if it does not exis
+create_dir <- function(path) {
+    # create a new directory if it does not exist
+    if (!dir.exists(path)) {
+        dir.create(path)
+    }
+}
+
+
+# function to create the weekly plot
 create_weekly_plot <- function(df, path, plot_name) {
     # convert the date format
     df$Week <- as.Date(df$Week, format = "%m/%d/%Y")
@@ -25,7 +35,7 @@ create_weekly_plot <- function(df, path, plot_name) {
     ggsave(paste0(y_column, "_timeseries_plot.svg"), p1, path = path)
 }
 
-
+# function to create the monthly plot
 create_monthly_plot <- function(df, path, y_column, plot_name) {
     # convert the date format
     df$date <- as.Date(df$date, format = "%Y-%m-%d")
@@ -54,15 +64,13 @@ create_monthly_plot <- function(df, path, y_column, plot_name) {
 
     # create a new directory if it does not exist
     plot_path <- file.path(path, y_column)
-    if (!dir.exists(plot_path)) {
-        dir.create(plot_path)
-    }
+    create_dir(plot_path)
 
     # Save the plot as svg file
     ggsave(paste0(y_column, "_timeseries_plot.svg"), p1, path = plot_path)
 }
 
-
+# function to get the plot for the residuals
 plot_forecast_errors <- function(forecasterrors, column, path){
     # make a histogram of the forecast errors:
     mybinsize <- IQR(forecasterrors)/4
@@ -91,6 +99,7 @@ plot_forecast_errors <- function(forecasterrors, column, path){
     dev.off()
 }
 
+# function to save the plots as svg files
 create_svg_from_table <- function(results, name, table_width = 9, table_heigh = 7){
     # assemble the table
     result_table <- do.call(rbind, results)
@@ -109,6 +118,7 @@ create_svg_from_table <- function(results, name, table_width = 9, table_heigh = 
     dev.off()
 }
 
+# function to save the plots as svg files with a transformed table
 create_svg_from_transformed_table <- function(results, name, table_width = 9, table_heigh = 7){
     # assemble the table
     result_table <- do.call(rbind, results)
@@ -123,3 +133,116 @@ create_svg_from_transformed_table <- function(results, name, table_width = 9, ta
     grid.export(name)
     dev.off()
 }
+
+# function to plot the model coefficients
+barplot_model_coefs <- function(cvfit, predictor_names, window, horizon) {
+
+    # Get the coefficients
+    coefs <- as.vector(coef(cvfit, s = "lambda.min"))
+
+    # Create a data frame
+    coefs_df <- data.frame(Variable = c("(Intercept)", predictor_names), Coefficient = coefs)
+
+    # Remove the intercept from the coefficients
+    coefs_df <- coefs_df[-1, ]
+
+    # Create the plot
+    p <- ggplot(coefs_df, aes(x = reorder(Variable, Coefficient), y = Coefficient)) +
+        geom_bar(stat = "identity") +
+        coord_flip() +
+        labs(x = "Variable", y = "Coefficient",
+             title = paste("Lasso Coefficients (Window:", window, ", Horizon:", horizon, ")"))
+
+    return(p)
+}
+
+
+plot_coef_heatmap <- function(coefs, window, horizon, path) {
+
+    # create a sequence of dates based on the length of the coefficients list
+    dates <- seq.Date(from = as.Date("1990-08-01"), by = "month", length.out = length(coefs))
+
+    # initialize an empty data frame
+    df <- data.frame(Date = as.Date(character()), Variable = character(), Coefficients = double())
+
+    # loop through the coefficients list
+    for(i in seq_along(coefs)){
+        coefs_df <- data.frame(Date = rep(dates[i], length(coefs[[i]])),
+                            Variable = names(coefs[[i]]),
+                            Coefficients = coefs[[i]],
+                            stringsAsFactors = FALSE)
+        df <- rbind(df, coefs_df)
+    }
+
+    # remove row for intercept
+    df <- df[df$Variable != "(Intercept)", ]
+
+    # create the plot
+    p <- ggplot(df, aes(x = Date, y = Variable)) +
+        geom_tile(aes(fill = Coefficients)) +
+        scale_fill_gradient2(low = "#0c095b", mid = "#f0f2f2", high = "#760f08", midpoint = 0) +
+        theme_classic() +
+        labs(x = "Date", y = "Variable", fill = "Coefficient",
+            title = paste("Lasso Coefficients Heatmap (Window:", window, ", Horizon:", horizon, ")"))
+    # save the plot
+    plot_path <- paste0(path, "/monthly_perfomance")
+    create_dir(plot_path)
+    ggsave(filename = paste0(plot_path, "/heatmap_coefficients_window_", window, "_horizon_",
+                                            horizon, ".png"), plot = p)
+}
+
+
+plot_model_size <- function(coefs, window, horizon, path) {
+
+    # create a sequence of dates based on the length of the coefficients list
+    dates <- seq.Date(from =  as.Date("1990-08-01"), by = "month", length.out = length(coefs))
+
+    # initialize an empty data frame
+    df <- data.frame(Date = as.Date(character()), ModelSize = integer())
+
+    # loop through the coefficients list
+    for(i in seq_along(coefs)){
+        # Count the number of non-zero coefficients
+        model_size <- sum(coefs[[i]] != 0)
+
+        model_size_df <- data.frame(Date = dates[i],
+                                    ModelSize = model_size,
+                                    stringsAsFactors = FALSE)
+        df <- rbind(df, model_size_df)
+    }
+
+    # create the plot
+    p <- ggplot(df, aes(x = Date, y = ModelSize)) +
+            geom_line(color = "#163925") +
+            theme_minimal() +
+            labs(x = "Date", y = "Model Size",
+                title = paste("Lasso Model Size (Window:", window, ", Horizon:", horizon, ")"))
+
+    # save the plot
+    plot_path <- paste0(path, "/model_size")
+    create_dir(plot_path)
+    ggsave(filename = paste0(plot_path, "/model_size_window_", window, "_horizon_",
+                                            horizon, ".png"), plot = p)
+    }
+
+# function to plot actual vs. predicted values
+plot_actual_vs_predicted <- function(predictions_df, window, horizon, path) {
+
+    # create the plot
+    p <- ggplot(predictions_df, aes(x = Truth, y = Prediction)) +
+    geom_point(alpha = 0.5) +
+    geom_abline(slope = 1, intercept = 0, color = "#760f08") +
+    coord_equal() +
+    theme_minimal() +
+    labs(x = "Actual", y = "Predicted",
+         title = paste("Actual vs Predicted (Window:", window, ", Horizon:", horizon, ")"))
+
+    # save the plot
+    plot_path <- paste0(path, "/actual_vs_predicted")
+    create_dir(plot_path)
+    ggsave(filename = paste0(plot_path, "/model_size_window_", window, "_horizon_",
+                                            horizon, ".png"), plot = p)
+}
+
+
+# ggsave(filename = paste0("plots/actual_vs_predicted_window_", window, "_horizon_", horizon, ".png"), plot = p)
