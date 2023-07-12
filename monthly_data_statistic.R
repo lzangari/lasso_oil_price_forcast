@@ -5,6 +5,7 @@
 library(moments)  # for skewness and kurtosis
 library(tseries)  # for jarque.bera.test
 library(urca)     # for ur.kpss
+library(xtable)
 
 save_plots <- "C:/Repositories/lasso_oil_price_forcast/results/monthly"
 df <- read.csv("C:/Repositories/lasso_oil_price_forcast/Data/csv/all_data_transformed.csv")
@@ -46,9 +47,9 @@ for (column_name in names(df)[-1]) {
         sd = column_sd,
         min = column_min,
         max = column_max,
-        quantile_25 = column_quantiles[1],
-        quantile_50 = column_quantiles[2],
-        quantile_75 = column_quantiles[3],
+        quantile_25 = column_quantiles[[1]],
+        quantile_50 = column_quantiles[[2]],
+        quantile_75 = column_quantiles[[3]],
         skewness = column_skewness,
         kurtosis = column_kurtosis,
         #jb_p_value = jb_p_value,
@@ -60,7 +61,15 @@ for (column_name in names(df)[-1]) {
     summary_stats <- rbind(summary_stats, column_summary)
 }
 
-create_svg_from_transformed_table(summary_stats, "C:/Repositories/lasso_oil_price_forcast/results/monthly/summary_transformation.svg", table_width = 20, table_heigh = 12)
+# convert the dataframe to latex table and save it to .tex file
+summary_stats_tex <- xtable(summary_stats)#, digits = 4)
+print(summary_stats_tex, type = "latex",
+        file = paste0(save_plots, "/summary_transformation_table.tex"),
+        include.rownames = FALSE)
+
+
+create_svg_from_transformed_table(summary_stats,
+                    "results/monthly/summary_transformation.svg", table_width = 20, table_heigh = 12)
 
 # Save the summary statistics data frame to a CSV file
 write.csv(summary_stats, "C:/Repositories/lasso_oil_price_forcast/Data/csv/summary_stats.csv", row.names = FALSE)
