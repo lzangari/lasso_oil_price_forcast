@@ -23,7 +23,7 @@ wd <- file.path(getwd())
 setwd(wd)
 Sys.setlocale("LC_TIME", "C")
 
-save_plots <- "C:/Repositories/lasso_oil_price_forcast/results/weekly"
+save_plots <- "results/weekly"
 
 #######################################################################
 ###----------------------- Check random walk -----------------------###
