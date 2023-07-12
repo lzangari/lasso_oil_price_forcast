@@ -277,18 +277,20 @@ plot_line_actual_vs_predicted <- function(predictions_df, window, horizon, path)
     # create the plot
     data$Date <- as.Date(data$Date)
     p <- ggplot(data, aes(x = Date)) +
-        geom_line(aes(y = Truth, colour = "Actual"), size = 0.5, linetype = "solid", alpha = 0.65) +
-        geom_line(aes(y = Prediction, colour = "Predicted"), size = 0.5) +
-        geom_line(aes(y = NaiveForecast, colour = "Naive"), size = 0.5, linetype = "dashed") + #, linetype = "dashed"
-        geom_line(aes(y = HistoricalForecast, colour = "Historical"), size = 0.5) +
+        geom_line(aes(y = Truth, colour = "Actual", linetype = "Actual"), size = 0.5, alpha = 0.65) +
+        geom_line(aes(y = Prediction, colour = "Predicted", linetype = "Predicted"), size = 0.5) +
+        geom_line(aes(y = NaiveForecast, colour = "Naive", linetype = "Naive"), size = 0.5) +
+        geom_line(aes(y = HistoricalForecast, colour = "Historical", linetype = "Historical"), size = 0.5) +
         theme_minimal() +
         scale_color_manual(values = c("Actual" = "black", "Predicted" = "red",
-                                            "Naive" = "blue", "Historical" = "#24a724")) +
-
+                                                    "Naive" = "blue", "Historical" = "#24a724")) +
+        scale_linetype_manual(values = c("Actual" = "solid", "Predicted" = "solid",
+                                                    "Naive" = "dashed", "Historical" = "solid")) +
         labs(x = "Date", y = "Monthly crude oil return (%)",
             title = paste("Actual and Predicted over time (Window:", window, ", Horizon:", horizon, ")"),
-            color = "Legend") +
-        theme(legend.position = "bottom")
+            color = "Legend", linetype = "Legend") +
+        theme(legend.position = "bottom", legend.key.size=unit(3,"lines"))
+
     # save the plot
     plot_path <- paste0(path, "/prediction_performance")
     create_dir(plot_path)
