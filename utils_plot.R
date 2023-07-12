@@ -66,7 +66,7 @@ create_weekly_plot <- function(df, path, plot_name) {
         scale_y_continuous(labels = scientific)
 
     # Save the plot as svg file
-    ggsave(paste0(y_column, "_timeseries_plot.svg"), p1, path = path)
+    ggsave(paste0(y_column, "_timeseries_plot.png"), p1, path = path)
 }
 
 # function to create the monthly plot
@@ -91,9 +91,10 @@ create_monthly_plot <- function(df, path, y_column, plot_name) {
         geom_rect(data = shaded_areas, aes(xmin = start, xmax = end, ymin = -Inf, ymax = Inf),
                                     fill = "#ff8000", alpha = 0.3, inherit.aes =FALSE) +
         #scale_color_manual(labels = c("Recession years"), values = c("#ff8000")) +
-        scale_x_date(date_breaks = "24 months", date_labels = "%Y-%m") +
+        scale_x_date(date_breaks = "48 months", date_labels = "%Y-%m") +
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
-        labs(x = "Date", y = plot_name, title = paste("Time Series Plot for", plot_name))
+        labs(x = "Date", y = plot_name, title = paste("Time Series Plot for", plot_name))+
+        theme_minimal()
         #scale_y_continuous(labels = scales::scientific)
 
     # create a new directory if it does not exist
@@ -101,7 +102,7 @@ create_monthly_plot <- function(df, path, y_column, plot_name) {
     create_dir(plot_path)
 
     # Save the plot as svg file
-    ggsave(paste0(y_column, "_timeseries_plot.svg"), p1, path = plot_path)
+    ggsave(paste0(y_column, "_timeseries_plot.png"), p1, path = plot_path)
 
 }
 

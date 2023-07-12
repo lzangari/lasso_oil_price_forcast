@@ -117,17 +117,6 @@
     "Citation": "",
     "Datasets":[
         {
-            "file_name": "GDP_EU_Monthly_old",
-            "frequency": "Monthly",
-            "start_date": "01.01.1995",
-            "end_date": "01.01.2023",
-            "date_format": "%Y-%m-%d",
-            "file_type": "csv",
-            "path": "Data/GDP/GDP_EU_Monthly.csv",
-            "date_column": "DATE",
-            "url": "https://fred.stlouisfed.org/series/CPMNACSCAB1GQEU272020"
-        },
-        {
             "file_name": "GDP_EU_Monthly",
             "frequency": "Monthly",
             "start_date": "01.03.1960",
@@ -270,17 +259,6 @@
             "file_type": "csv",
             "path": "Data/Main_Economic_Indicators/UNRATE_EU.csv",
             "date_column": "DATE"
-        },
-        {
-            "file_name": "Money_supply_M2_USA",
-            "frequency": "Monthly",
-            "start_date": "01.01.1959",
-            "end_date": "01.04.2023",
-            "date_format": "%Y-%m-%d",
-            "file_type": "csv",
-            "path": "Data/Main_Economic_Indicators/Money_supply_M2_USA.csv",
-            "date_column": "DATE",
-            "url": "https://fred.stlouisfed.org/series/WM2NS"
         },
         {
             "file_name": "Economic_policy_uncerainty_index_USA",

@@ -32,7 +32,7 @@ frequency <- "Monthly"
 start_date <- "1989-01-01"
 end_date <- "2023-05-01"
 
-data_assembly <- F
+data_assembly <- T
 #######################################################################
 ###---------------------- Helper Functions -------------------------###
 #######################################################################
@@ -55,7 +55,7 @@ read_data <- function(dataset) {
     if (dataset$file_type == "xlsx") {
         return(read_excel(dataset$path))
     } else if (dataset$file_type == "csv") {
-        return(read_csv(dataset$path))
+        return(read_csv(dataset$path, col_types = cols()))
     } else {
         stop("Unsupported file type")
     }
@@ -66,7 +66,6 @@ read_data <- function(dataset) {
 filter_data <- function(data, dataset, start_date, end_date) {
 
     # # Convert the date column to Date type
-    print(dataset$file_name)
     data[[dataset$date_column]] <- as.Date(data[[dataset$date_column]], format = dataset$date_format)
     # Filter the data based on the start and end dates
     data <- data %>%

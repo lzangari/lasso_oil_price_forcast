@@ -19,7 +19,7 @@ decompose_and_plot_acf <- function(df, column, lag_max, path, frequency = 4) {
     decomposed <- decompose(ts_data)
 
     # plot the decomposed plot
-    svg(filename = paste0(plot_path, "/", paste0(column, "_residual_decompose_plot.svg")))
+    png(filename = paste0(plot_path, "/", paste0(column, "_residual_decompose_plot.png")))
     plot(decomposed$random)
     dev.off()
 
@@ -40,33 +40,26 @@ decompose_and_plot_acf <- function(df, column, lag_max, path, frequency = 4) {
     acf_plot_residual <- ggAcf(decomposed$random, lag.max = lag_max) +
                     geom_hline(yintercept = c(-threshold_1, threshold_1), linetype = "dashed", color = "red") +
                     geom_hline(yintercept = c(-threshold_5, threshold_5), linetype = "dashed", color = "blue") +
-                    geom_hline(yintercept = c(-threshold_10, threshold_10), linetype = "dashed", color = "green")
+                    geom_hline(yintercept = c(-threshold_10, threshold_10), linetype = "dashed", color = "green") + 
+                    theme_minimal()
                     # annotate("text", x = 45, y = -0.125, label = "1% significance", color = "red") +
                     # annotate("text", x = 45, y = -0.15, label = "5% significance", color = "blue") +
                     # annotate("text", x = 45, y = -0.175, label = "10% significance", color = "green")
     # Save the ACF plot
-    ggsave(paste0(column, "_acf_plot_residual.svg"), plot = acf_plot_residual, dpi = 300,
+    ggsave(paste0(column, "_acf_plot_residual.png"), plot = acf_plot_residual, dpi = 300,
                                                     width = 7, height = 5, path = plot_path)
-
-
-    # plot the forecasterrors of the residuals to check the residuals are normally distributed
-    #plot_forecast_errors(na.omit(decomposed$random), column, plot_path)
-
-    # Save the plot as svg file
-    # ggsave(paste0(column, "_forecast_errors.svg"), plot = plotForecastErrors(decomposed$random), dpi = 300,
-    #                                                 width = 7, height = 5, path = plot_path)
 
 
     # Plot the ACF of the trend
     acf_plot_trend <- ggAcf(decomposed$trend, lag.max = lag_max)
     # Save the ACF plot
-    ggsave(paste0(column, "_acf_plot_trend.svg"), plot = acf_plot_trend, dpi = 300,
+    ggsave(paste0(column, "_acf_plot_trend.png"), plot = acf_plot_trend, dpi = 300,
                                                     width = 7, height = 5, path = plot_path)
 
     # Plot the ACF of the seasonal component
     acf_plot_seasonal <- ggAcf(decomposed$seasonal, lag.max = lag_max)
     # Save the ACF plot
-    ggsave(paste0(column, "_acf_plot_seasonal.svg"), plot = acf_plot_seasonal, dpi = 300,
+    ggsave(paste0(column, "_acf_plot_seasonal.png"), plot = acf_plot_seasonal, dpi = 300,
                                                     width = 7, height = 5, path = plot_path)
 }
 
@@ -81,7 +74,6 @@ perform_adf_analysis <- function(df, column, indicator = "none") {
     if (indicator == "none") {
         indicator <- column
     }
-    print(indicator)
     results_df <- data.frame(
         Indicator = indicator,
         Test_Statistic = adf_result$statistic,
