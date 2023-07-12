@@ -63,8 +63,6 @@ historical_forecast <- function(y_train, horizon) {
 #######################################################################
 ###-------------------- modelling with lasso & CV ------------------###
 #######################################################################
-# data_scaled <- read.csv("Data/csv/all_data_standardized.csv")
-
 # function to train Lasso model and make predictions
 train_predict <- function(x_train, y_train, x_test, rule ="min", loss_function = "mse") {
 
