@@ -35,7 +35,7 @@ mspe_adj <- function(actual, predicted, n_predictions) {
 
 
 # Compute evaluation metrics for a set of predictions
-evaluate_predictions <- function(actual, predicted, y_train) {
+evaluate_predictions <- function(actual, predicted, y_train, model_name) {
 
     # number of predictions
     n_predictions = length(predicted)
@@ -56,12 +56,11 @@ evaluate_predictions <- function(actual, predicted, y_train) {
     # cumulative squared prediction error (CSPE)
     #cspe_score = cumsum((actual - predicted)^2)
 
+    col_names = c(paste("R2OutOfSample", model_name, sep = "_"),
+                  paste("MSPE", model_name, sep = "_"),
+                  paste("MAE", model_name, sep = "_"),
+                  paste("MASE", model_name, sep = "_"),
+                  paste("MAPE", model_name, sep = "_"))
+    return(setNames(data.frame(r2_out_of_sample, mspe_score, mae_score, mase_score, mape_score), col_names))
 
-
-    return(data.frame(R2OutOfSample = r2_out_of_sample,
-                    MSPE = mspe_score,
-                    MAE = mae_score,
-                    MASE = mase_score,
-                    MAPE = mape_score
-                    ))
 }
