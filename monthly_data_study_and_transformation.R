@@ -21,7 +21,7 @@ wd <- file.path(getwd())
 setwd(wd)
 Sys.setlocale("LC_TIME", "C")
 
-save_plots <- "C:/Repositories/lasso_oil_price_forcast/plots/monthly"
+save_plots <- "C:/Repositories/lasso_oil_price_forcast/results/monthly"
 df <- read.csv("C:/Repositories/lasso_oil_price_forcast/Data/csv/all_data_cleaned.csv")
 
 

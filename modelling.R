@@ -22,7 +22,7 @@ wd <- file.path(getwd())
 setwd(wd)
 Sys.setlocale("LC_TIME", "C")
 
-save_plots <- "plots/monthly"
+save_plots <- "results/monthly"
 df <- read.csv("Data/csv/all_data_transformed.csv")
 
 rolling <- TRUE
@@ -139,7 +139,7 @@ save_overall_results <- function(predictions_df, evaluations_df, rule_model,
 if (rolling == TRUE) {
     # loop over rolling windows and horizons (combination of rolling window size and forecasting horizon)
     for (loss_function in c("mse", "deviance")) {
-            root_path <- paste0("plots/rolling/", loss_function, "/model_coefficients_")
+            root_path <- paste0("results/rolling/", loss_function, "/model_coefficients_")
         # rolling windows of 2 to 10 years
         for (rule_model in c("min", "1se")) {
             # list to store predictions
@@ -148,7 +148,7 @@ if (rolling == TRUE) {
             cpse_df <- data.frame()
             model_plot_path <- paste0(root_path, rule_model)
             # rule_model <- "min"
-            # model_plot_path <- paste0("plots/model_coefficients_", rule_model)
+            # model_plot_path <- paste0("results/model_coefficients_", rule_model)
             for (num_year in year_range) {  #3:20
                 window <- num_year * 12
 
@@ -261,7 +261,7 @@ if (rolling == TRUE) {
 if (recursive == TRUE) {
     for (loss_function in c("mse", "deviance")) {
 
-        root_path <- paste0("plots/recursive/", loss_function, "/model_coefficients_")
+        root_path <- paste0("results/recursive/", loss_function, "/model_coefficients_")
 
         # loop over recursive windows and rule models (minimum and 1 standard error)
         for (rule_model in c("min", "1se")) {

@@ -6,7 +6,7 @@ library(moments)  # for skewness and kurtosis
 library(tseries)  # for jarque.bera.test
 library(urca)     # for ur.kpss
 
-save_plots <- "C:/Repositories/lasso_oil_price_forcast/plots/monthly"
+save_plots <- "C:/Repositories/lasso_oil_price_forcast/results/monthly"
 df <- read.csv("C:/Repositories/lasso_oil_price_forcast/Data/csv/all_data_transformed.csv")
 
 source("utils_plot.R")
@@ -60,7 +60,7 @@ for (column_name in names(df)[-1]) {
     summary_stats <- rbind(summary_stats, column_summary)
 }
 
-create_svg_from_transformed_table(summary_stats, "C:/Repositories/lasso_oil_price_forcast/plots/monthly/summary_transformation.svg", table_width = 20, table_heigh = 12)
+create_svg_from_transformed_table(summary_stats, "C:/Repositories/lasso_oil_price_forcast/results/monthly/summary_transformation.svg", table_width = 20, table_heigh = 12)
 
 # Save the summary statistics data frame to a CSV file
 write.csv(summary_stats, "C:/Repositories/lasso_oil_price_forcast/Data/csv/summary_stats.csv", row.names = FALSE)
