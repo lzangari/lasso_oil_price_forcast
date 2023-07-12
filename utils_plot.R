@@ -8,6 +8,38 @@ library(grid)
 wd <- file.path(getwd())
 setwd(wd)
 
+
+plot_names <- list("oil_price" = "Oil Price",
+                    "one_lag_oil_stock" = "U.S. Ending Stocks",
+                    "three_lag_log_oil_export" = "U.S. Exports",
+                    "twelve_lag_log_oil_production" = "U.S. Field Production",
+                    "two_lag_product_supply" = "U.S. Product Supplied",
+                    "one_lag_product_net_import" = "U.S. Net Imports",
+                    "one_lag_opec_production" = "OPEC Oil Production",
+                    "one_lag_killian_index" = "Killian Index",
+                    "cpi_oecd" = "OECD CPI",
+                    "two_lag_cpi_usa" = "U.S. CPI",
+                    "twelve_lag_log_unrate_usa" = "U.S. Unemployment Rate",
+                    "one_lag_unrate_eu" = "EU Unemployment Rate",
+                    "one_lag_epui_eu" = "EU EPUI",
+                    "one_lag_epui_usa" = "U.S. EPUI",
+                    "one_lag_gdp_eu" = "EU GDP",
+                    "twelve_lag_log_gdp_usa" = "U.S. GDP",
+                    "one_lag_federal_fund" = "Federal Funds Rate",
+                    "twelve_lag_log_tb3ms" = "3-Month Treasury Bill",
+                    "two_lag_sp500" = "S&P 500",
+                    "two_lag_msci" = "MSCI World",
+                    "twelve_lag_log_stoxx600" = "EURO STOXX 600",
+                    "one_lag_gsci" = "GSCI",
+                    "one_lag_gold_price" = "Gold",
+                    "one_lag_copper_future" = "Copper Future",
+                    "original_geopolitical_risk" = "GRI",
+                    "two_lag_wui" = "WUI",
+                    "original_one_lag_oil_return_price" = "Return price [1 lag]")
+
+
+
+#######################################################################
 # create directory if it does not exis
 create_dir <- function(path) {
     # create a new directory if it does not exist
@@ -15,7 +47,6 @@ create_dir <- function(path) {
         dir.create(path, recursive = TRUE)
     }
 }
-
 
 # function to create the weekly plot
 create_weekly_plot <- function(df, path, plot_name) {
@@ -36,7 +67,6 @@ create_weekly_plot <- function(df, path, plot_name) {
 
     # Save the plot as svg file
     ggsave(paste0(y_column, "_timeseries_plot.svg"), p1, path = path)
-
 }
 
 # function to create the monthly plot
@@ -109,12 +139,6 @@ create_svg_from_table <- function(results, name, table_width = 9, table_heigh = 
     # assemble the table
     result_table <- do.call(rbind, results)
 
-    # # Round numeric columns to 3 decimal places
-    # numeric_cols <- sapply(result_table, is.numeric)
-    # result_table[, numeric_cols] <- round(result_table[, numeric_cols], 3)
-    # # Transpose the table
-    # result_table <- as.data.frame(t(result_table))
-
     table_grob <- tableGrob(result_table, theme = ttheme_default(base_size = 8, base_line_size = 0.5))
     grDevices::svg(name, width = table_width, height = table_heigh)
     grid.newpage()
@@ -176,13 +200,23 @@ plot_coef_heatmap <- function(coefs, window, horizon, path) {
 
     # loop through the coefficients list
     for(i in seq_along(coefs)){
-        coefs_df <- data.frame(Date = rep(dates[i], length(coefs[[i]])),
-                            Variable = names(coefs[[i]]),
-                            Coefficients = coefs[[i]],
-                            stringsAsFactors = FALSE)
-        df <- rbind(df, coefs_df)
+        # Check if names(coefs[[i]]) is not NULL before proceeding
+        if(!is.null(names(coefs[[i]]))) {
+            new_names <- sapply(names(coefs[[i]]), function(x) {
+                if(x %in% names(plot_names)) {
+                    return(plot_names[[x]])
+                } else {
+                    return(x)
+                }
+            })
+            names(coefs[[i]]) <- new_names
+            coefs_df <- data.frame(Date = rep(dates[i], length(coefs[[i]])),
+                                Variable = names(coefs[[i]]),
+                                Coefficients = coefs[[i]],
+                                stringsAsFactors = FALSE)
+            df <- rbind(df, coefs_df)
+        }
     }
-
     # remove row for intercept
     df <- df[df$Variable != "(Intercept)", ]
 
@@ -327,4 +361,3 @@ plot_cpse <- function(cpse_df, window, horizon, path) {
 }
 
 
-#ggsave(filename = "test.png", plot = p)

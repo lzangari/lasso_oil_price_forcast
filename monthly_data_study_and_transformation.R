@@ -25,6 +25,9 @@ save_plots <- "C:/Repositories/lasso_oil_price_forcast/plots/monthly"
 df <- read.csv("C:/Repositories/lasso_oil_price_forcast/Data/csv/all_data_cleaned.csv")
 
 
+#######################################################################
+###--------------------- stationary analysis -----------------------###
+#######################################################################
 
 analysis_stationary <- function(df, save_plots, y_column, plot_name, indicator,
                                                             lag_max=24, frequency=12){
@@ -47,7 +50,7 @@ analysis_stationary <- function(df, save_plots, y_column, plot_name, indicator,
 }
 
 # add crude oil return price
-df[["one_lag_oil_return_price"]] <- (df[["oil_price"]]/lag(df[["oil_price"]]) -1) *100
+df[["one_lag_oil_return_price"]] <- (df[["oil_price"]] / lag(df[["oil_price"]]) - 1) * 100
 
 # #######################################################################
 # ###------------- Check Autocorrelation with original ---------------###
@@ -106,7 +109,7 @@ short_names <- list("oil_price" = "Oil Price",
                     "copper_future" = "Copper Future",
                     "geopolitical_risk" = "GRI",
                     "wui" = "WUI",
-                    "one_lag_oil_return_price" = "Retrun price [1 lag]")
+                    "one_lag_oil_return_price" = "Return price [1 lag]")
 # do analysis for each data
 adf_results <- list()
 adf_results_df <- NULL

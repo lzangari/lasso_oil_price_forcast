@@ -27,8 +27,8 @@ df <- read.csv("Data/csv/all_data_transformed.csv")
 
 rolling <- TRUE
 recursive <- TRUE
-year_range <- 20:21 #3:20
-horizon_range <- c(2) #c(1, 2, 3, 6, 9, 12)
+year_range <- 3:20
+horizon_range <- c(1, 2, 3, 6, 7, 9, 12)
 static_window <- 60 # minimum amount for recursive window
 #######################################################################
 ###------------------------ Standadization -------------------------###
