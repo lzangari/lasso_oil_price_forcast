@@ -277,13 +277,13 @@ plot_line_actual_vs_predicted <- function(predictions_df, window, horizon, path)
     # create the plot
     data$Date <- as.Date(data$Date)
     p <- ggplot(data, aes(x = Date)) +
-        geom_line(aes(y = Truth, colour = "Actual"), size = 0.75, linetype = "solid", alpha = 0.65) +
+        geom_line(aes(y = Truth, colour = "Actual"), size = 0.5, linetype = "solid", alpha = 0.65) +
         geom_line(aes(y = Prediction, colour = "Predicted"), size = 0.5) +
-        geom_line(aes(y = NaiveForecast, colour = "Naive"), size = 0.5, alpha = 0.65, linetype = "dashed") + #, linetype = "dashed"
+        geom_line(aes(y = NaiveForecast, colour = "Naive"), size = 0.5, linetype = "dashed") + #, linetype = "dashed"
         geom_line(aes(y = HistoricalForecast, colour = "Historical"), size = 0.5) +
         theme_minimal() +
         scale_color_manual(values = c("Actual" = "black", "Predicted" = "red",
-                                            "Naive" = "blue", "Historical" = "#47da47")) +
+                                            "Naive" = "blue", "Historical" = "#24a724")) +
 
         labs(x = "Date", y = "Monthly crude oil return (%)",
             title = paste("Actual and Predicted over time (Window:", window, ", Horizon:", horizon, ")"),
