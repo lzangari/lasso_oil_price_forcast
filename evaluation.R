@@ -21,6 +21,11 @@ r2_oos <- function(actual, predicted, y_train) {
 }
 
 
+cpse <- function(actual, predicted) {
+    return(cumsum((actual - predicted)^2))
+}
+
+
 mase <- function(actual, forecast, y_train) {
     one_step_forecast <- mean(abs(diff(y_train)))
     return(mean(abs(actual - forecast) / one_step_forecast))
@@ -53,8 +58,6 @@ evaluate_predictions <- function(actual, predicted, y_train, model_name) {
     # mean absolute percentage error (MAPE)
     mape_score = Metrics::mape(actual, predicted)
 
-    # cumulative squared prediction error (CSPE)
-    #cspe_score = cumsum((actual - predicted)^2)
 
     col_names = c(paste("R2OutOfSample", model_name, sep = "_"),
                   paste("MSPE", model_name, sep = "_"),
