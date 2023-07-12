@@ -10,6 +10,7 @@ library(forecast)
 library(gridExtra)
 library(gridSVG)
 library(grid)
+library(xtable)
 
 source("data_assembly.R")
 source("utils_plot.R")
@@ -60,6 +61,11 @@ for (name in data_names){
     adf_results[[name]] <- adf_result
 }
 
+# convert the dataframe to latex table and save it to .tex file
+adf_results_tex <- xtable(adf_result)#, digits = 4)
+print(adf_results_tex, type = "latex",
+        file = paste0(save_plots, "/weekly_column_adf_table.tex"),
+        include.rownames = FALSE)
 
 # assemble the table
 adf_table <- do.call(rbind, adf_results)
