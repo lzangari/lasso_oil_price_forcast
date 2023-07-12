@@ -244,7 +244,7 @@ if (data_assembly) {
     # rename the columns of the data frame
     new_names <- c("date","oil_price", "oil_stock", "oil_export", "oil_production",
                 "product_supply", "product_net_import", "opec_production",
-                "killian_index", "cpi_oecd", "cpi_usa", "unrate_usa", "unrate_eu",
+                "kilian_index", "cpi_oecd", "cpi_usa", "unrate_usa", "unrate_eu",
                 "epui_eu", "epui_usa", "gdp_eu", "gdp_usa", "federal_fund", "tb3ms",
                 "sp500", "msci", "stoxx600", "gsci", "gold_price", "copper_future",
                 "geopolitical_risk", "wui")

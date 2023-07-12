@@ -62,7 +62,7 @@ plot_names <- list("oil_price" = "WTI Oil price [USD per barrel]",
                     "product_supply" = "U.S. Product Supplied of Petroleum Products [Thousand Barrels]",
                     "product_net_import" = "U.S. Net Imports of Crude Oil and Petroleum Products [Thousand Barrels]",
                     "opec_production" = "OPEC Oil Production [Thousand Barrels]",
-                    "killian_index" = "Killian Index",
+                    "kilian_index" = "Kilian Index",
                     "cpi_oecd" = "OECD Consumer Price Index",
                     "cpi_usa" = "U.S. Consumer Price Index",
                     "unrate_usa" = "U.S. Unemployment Rate [% of total labor force]",
@@ -90,7 +90,7 @@ short_names <- list("oil_price" = "Oil Price",
                     "product_supply" = "U.S. Product Supplied",
                     "product_net_import" = "U.S. Net Imports",
                     "opec_production" = "OPEC Oil Production",
-                    "killian_index" = "Killian Index",
+                    "kilian_index" = "Kilian Index",
                     "cpi_oecd" = "OECD CPI",
                     "cpi_usa" = "U.S. CPI",
                     "unrate_usa" = "U.S. Unemployment Rate",
@@ -129,10 +129,16 @@ for (name_index in 2:length(names(df))){
 }
 name <- paste0(save_plots, "/monthly_column_adf_table.svg")
 
-# convert the dataframe to latex table and save it to .tex file
+# convert the dataframe to latex table and save it to .tex file for adf
 adf_results_tex <- xtable(adf_results_df)#, digits = 4)
 print(adf_results_tex, type = "latex",
         file = paste0(save_plots, "/monthly_column_adf_table.tex"),
+        include.rownames = FALSE)
+
+# convert the dataframe to latex table and save it to .tex file for bp
+bp_results_tex <- xtable(hetero_results_df)#, digits = 4)
+print(bp_results_tex, type = "latex",
+        file = paste0(save_plots, "/monthly_column_bp_table.tex"),
         include.rownames = FALSE)
 
 # assemble the table for adf_table
@@ -173,7 +179,7 @@ original_data <- c("one_lag_oil_return_price",
                      "geopolitical_risk")
 
 one_lag_data <- c("oil_stock", "product_net_import", "epui_eu", "epui_usa",
-                   "opec_production", "killian_index", "gdp_eu",
+                   "opec_production", "kilian_index", "gdp_eu",
                    "gsci", "gold_price", "copper_future", "federal_fund","unrate_eu")
 #ong_lag_log_data <- c("gdp_usa")
 
@@ -190,6 +196,7 @@ remove_column <- c("oil_price")
 transformation_adf_list <- list()
 transformation_bp_list <- list()
 adf_results_after_transformation_df <- NULL
+bp_results_after_transformation_df <- NULL
 
 df_names <- names(df)[-1]
 # Loop through all column names in the dataframe
@@ -227,13 +234,21 @@ for (column_name in df_names) {
         transformation_adf_list[[new_column]] <- result_stock[[1]]
         adf_results_after_transformation_df <- rbind(adf_results_after_transformation_df, result_stock[[1]])
         transformation_bp_list[[new_column]] <- result_stock[[2]]
+        bp_results_after_transformation_df <- rbind(bp_results_after_transformation_df, result_stock[[2]])
         }
     }
 # convert the dataframe to latex table and save it to .tex file
 adf_results_transformation_tex <- xtable(adf_results_after_transformation_df)#, digits = 4)
-print(adf_results_tex, type = "latex",
+print(adf_results_transformation_tex, type = "latex",
         file = paste0(save_plots, "/monthly_column_adf_after_transformation_table.tex"),
         include.rownames = FALSE)
+
+# convert the dataframe to latex table and save it to .tex file for bp
+bp_results_transformation_tex <- xtable(bp_results_after_transformation_df)#, digits = 4)
+print(bp_results_transformation_tex, type = "latex",
+        file = paste0(save_plots, "/monthly_column_bp_after_transformation_table.tex"),
+        include.rownames = FALSE, digits=c(0,0,4,3,4))
+
 
 # assemble the table for adf_table
 create_svg_from_table(results = transformation_adf_list,
