@@ -189,6 +189,8 @@ remove_column <- c("oil_price")
 
 transformation_adf_list <- list()
 transformation_bp_list <- list()
+adf_results_after_transformation_df <- NULL
+
 df_names <- names(df)[-1]
 # Loop through all column names in the dataframe
 for (column_name in df_names) {
@@ -223,9 +225,15 @@ for (column_name in df_names) {
         df <- df %>% select(-column_name)
         # save the results
         transformation_adf_list[[new_column]] <- result_stock[[1]]
+        adf_results_after_transformation_df <- rbind(adf_results_after_transformation_df, result_stock[[1]])
         transformation_bp_list[[new_column]] <- result_stock[[2]]
         }
     }
+# convert the dataframe to latex table and save it to .tex file
+adf_results_transformation_tex <- xtable(adf_results_after_transformation_df)#, digits = 4)
+print(adf_results_tex, type = "latex",
+        file = paste0(save_plots, "/monthly_column_adf_after_transformation_table.tex"),
+        include.rownames = FALSE)
 
 # assemble the table for adf_table
 create_svg_from_table(results = transformation_adf_list,
