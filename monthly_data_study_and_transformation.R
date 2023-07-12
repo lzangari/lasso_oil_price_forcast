@@ -152,16 +152,14 @@ for (column_name in names(df)[-1]) {
         p <- ggplot(df, aes_string(column_name)) +
             geom_histogram(aes(y = ..density..), bins = 30, fill = "#163925", alpha = 0.5) +
             geom_density(color = "#163925") +
-            labs(x = column_name, y = "Density")
-
-
-        # # # Add a scatter plot of 'one_lag_oil_price'
-        # p <- p + geom_point(aes_string(x = column_name, y = "original_one_lag_oil_return_price"), color = "red") +
-        #     labs(title = paste("Histogram of", column_name, "with one_lag_oil_price overlay"))
+            labs(x = column_name, y = "Density") +
+            theme_minimal()
 
         # Save the plot
-        ggsave(paste0(column_name, "_histogram.png"), plot = p, path = paste0((save_plots), "/histogram_of_data_before_transformation"))
-        #ggsave(paste0(column_name, "_histogram.svg"), plot = p, path = paste0((save_plots), "/histogram_of_data"))
+        plot_path <- paste0(save_plots, "/histogram_of_data_before_transformation")
+        create_dir(plot_path)
+        ggsave(paste0(column_name, "_histogram.png"), plot = p, path = plot_path)
+
     }
 }
 
@@ -235,9 +233,18 @@ create_svg_from_table(results = transformation_bp_list,
                 name = paste0(save_plots, "/monthly_transformed_column_bptest_table.svg"),
                 table_width = 11)
 
+
+#######################################################################
+###------------------------- filter data ---------------------------###
+#######################################################################
+# filter the data before saving to avoid NA
+df$date <- as.Date(df$date, format = "%Y-%m-%d")
+# df <- df[df$date >= as.Date("1990-08-01") & df$date <= as.Date("2022-08-01"), ]
+df <- df %>% filter(date >= "1990-08-01", date <= "2022-08-01")
+
+
 # save the data as csv
-write.csv(df, file = "C:/Repositories/lasso_oil_price_forcast/Data/csv/all_data_transformed.csv",
-                        row.names = FALSE)
+write.csv(df, file = "Data/csv/all_data_transformed.csv", row.names = FALSE)
 
 # Save as .rda the cleaned data
 save(df, file = "Data/Rda/all_data_transformed.rda")
