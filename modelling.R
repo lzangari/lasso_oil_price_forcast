@@ -27,18 +27,21 @@ df <- read.csv("Data/csv/all_data_transformed.csv")
 
 rolling <- TRUE
 recursive <- TRUE
+year_range <- 20:21 #3:20
+horizon_range <- c(2) #c(1, 2, 3, 6, 9, 12)
+static_window <- 60 # minimum amount for recursive window
 #######################################################################
 ###------------------------ Standadization -------------------------###
 #######################################################################
 # standardize the predictors
-# data_scaled <- df
-# data_scaled[-c(1, ncol(df))] <- scale(df[-c(1, ncol(df))])
+data_scaled <- df
+data_scaled[-c(1, ncol(df))] <- scale(df[-c(1, ncol(df))])
 
-# # print the first few rows of the standardized data
-# head(data_scaled)
-# names(data_scaled)
-# write.csv(data_scaled, file = "Data/csv/all_data_standardized.csv",
-#                 row.names = FALSE)
+# print the first few rows of the standardized data
+head(data_scaled)
+names(data_scaled)
+write.csv(data_scaled, file = "Data/csv/all_data_standardized.csv",
+                row.names = FALSE)
 
 #######################################################################
 ###-------------------- defining benchmark models ------------------###
@@ -60,12 +63,7 @@ historical_forecast <- function(y_train, horizon) {
 #######################################################################
 ###-------------------- modelling with lasso & CV ------------------###
 #######################################################################
-
-# a 12-month window for the smaller window and a 60-month window for the larger window.
-# forecasts horizon for 1-month and 6-months ahead.
-
-
-data_scaled <- read.csv("Data/csv/all_data_standardized.csv")
+# data_scaled <- read.csv("Data/csv/all_data_standardized.csv")
 
 # function to train Lasso model and make predictions
 train_predict <- function(x_train, y_train, x_test, rule ="min", loss_function = "mse") {
@@ -95,6 +93,23 @@ train_predict <- function(x_train, y_train, x_test, rule ="min", loss_function =
 
     return(list(preds = preds, coefs = coefs))
 }
+
+
+calculate_cpse <- function(predictions_df, all_actuals, all_preds, all_naives, all_historicals, window, horizon){
+    cpse_preds <- cpse(actual = all_actuals, predicted = all_preds)
+                  cpse_naive <- cpse(actual = all_actuals, predicted = all_naives)
+                  cpse_historical <- cpse(actual = all_actuals, predicted = all_historicals)
+    # store the cpse in a dataframe
+    cpse_df_i <- data.frame(Window = rep(window, length(cpse_preds)),
+                Horizon = rep(horizon, length(cpse_preds)),
+                Date = predictions_df[predictions_df$Window == window & predictions_df$Horizon == horizon, ]$Date,
+                CPSE_Lasso = cpse_preds,
+                CPSE_Naive = cpse_naive,
+                CPSE_Historical = cpse_historical)
+
+    return(cpse_df_i)
+}
+
 
 plot_model_variables <- function(coef_list, window, horizon, model_plot_path){
     model_coef <- plot_coef_heatmap(coefs = coefs_list, window = window,
@@ -128,7 +143,7 @@ if (rolling == TRUE) {
     for (loss_function in c("mse", "deviance")) {
             root_path <- paste0("plots/rolling/", loss_function, "/model_coefficients_")
         # rolling windows of 2 to 10 years
-        for (rule_model in c("min", "1se")) { #c("min", "1se")
+        for (rule_model in c("min", "1se")) {
             # list to store predictions
             predictions_df <- data.frame()
             evaluations_df <- data.frame()
@@ -136,11 +151,11 @@ if (rolling == TRUE) {
             model_plot_path <- paste0(root_path, rule_model)
             # rule_model <- "min"
             # model_plot_path <- paste0("plots/model_coefficients_", rule_model)
-            for (num_year in 20:21) {  #3:20
+            for (num_year in year_range) {  #3:20
                 window <- num_year * 12
 
                 # forecasting horizons of 1, 3, 6, 9, and 12 months
-                for (horizon in c(2)) { #c(1, 2, 3, 6, 9, 12)
+                for (horizon in horizon_range) { #
                     print(paste("Window:", window, ",Horizon:", horizon, ",Rule:", rule_model))
                     #######################################################################
                     # initialize lists and vectors
@@ -155,18 +170,18 @@ if (rolling == TRUE) {
                     #######################################################################
                     # prepare the data for the current window and horizon
                     for (i in seq(window + horizon, nrow(data_scaled), by = horizon)) {
-                    # get train and test data for current window and horizon
-                    train_data <- data_scaled[(i - window - horizon + 1):(i - 1), ][,
-                                            !names(data_scaled) %in% c("date", "original_one_lag_oil_return_price")]
-                    y_train <- data_scaled[(i - window - horizon + 1):(i - 1),
-                                            "original_one_lag_oil_return_price"]
-                    test_data_with_date <- data_scaled[i:(i + horizon - 1), ]
-                    test_data <- data_scaled[i:(i + horizon - 1), ][,
-                                            !names(data_scaled) %in% c("date", "original_one_lag_oil_return_price")]
+                        # get train and test data for current window and horizon
+                        train_data <- data_scaled[(i - window - horizon + 1):(i - 1), ][,
+                                                !names(data_scaled) %in% c("date", "original_one_lag_oil_return_price")]
+                        y_train <- data_scaled[(i - window - horizon + 1):(i - 1),
+                                                "original_one_lag_oil_return_price"]
+                        test_data_with_date <- data_scaled[i:(i + horizon - 1), ]
+                        test_data <- data_scaled[i:(i + horizon - 1), ][,
+                                                !names(data_scaled) %in% c("date", "original_one_lag_oil_return_price")]
 
-                    # stop the loop if we reach the end of the dataset
-                    if (i + horizon > nrow(data_scaled)) {
-                        break
+                        # stop the loop if we reach the end of the dataset
+                        if (i + horizon > nrow(data_scaled)) {
+                            break
                     }
                     #######################################################################
                     # trains a Lasso model for each rolling window and forecasting horizon and makes predictions
@@ -221,16 +236,9 @@ if (rolling == TRUE) {
                     evaluations_df <- rbind(evaluations_df, eval_df)
                     #######################################################################
                     # calculate cpse for each window and horizon
-                    cpse_preds <- cpse(actual = all_actuals, predicted = all_preds)
-                    cpse_naive <- cpse(actual = all_actuals, predicted = all_naives)
-                    cpse_historical <- cpse(actual = all_actuals, predicted = all_historicals)
-                    # store the cpse in a dataframe
-                    cpse_df_i <- data.frame(Window = rep(window, length(cpse_preds)),
-                                Horizon = rep(horizon, length(cpse_preds)),
-                                Date = predictions_df[predictions_df$Window == window & predictions_df$Horizon == horizon, ]$Date,
-                                CPSE_Lasso = cpse_preds,
-                                CPSE_Naive = cpse_naive,
-                                CPSE_Historical = cpse_historical)
+                    cpse_df_i <- calculate_cpse(predictions_df = predictions_df, all_actuals = all_actuals,
+                                all_preds = all_preds, all_naives = all_naives, all_historicals = all_historicals,
+                                window = window, horizon = horizon)
                     cpse_list[[i]] <- cpse_df_i
                     # combine all cpse for this window and horizon
                     cpse_df <- rbind(cpse_df, do.call(rbind, cpse_list))
@@ -275,7 +283,7 @@ if (recursive == TRUE) {
             print(paste("Recursive, Rule:", rule_model))
             #######################################################################
             # prepare the data for the current window and horizon (keep at least five year 12*5)
-            for (i in seq(60, nrow(data_scaled), by = 1)) {
+            for (i in seq(static_window, nrow(data_scaled), by = 1)) {
                 # get train and test data for current window and horizon
                 train_data <- data_scaled[1:(i - 1),
                                 !names(data_scaled) %in% c("date", "original_one_lag_oil_return_price")]
@@ -316,7 +324,6 @@ if (recursive == TRUE) {
             # combine all predictions for this window and horizon
             predictions_df <- rbind(predictions_df, do.call(rbind, pred_list))
             #######################################################################
-            #complete_window <- c(60:nrow(data_scaled))
             # combine all evaluation metrics for this window and horizon
             eval_df <- evaluate_predictions(actual = all_actuals, predicted = all_preds,
                                             y_train = y_train, model_name = "Lasso")
@@ -332,16 +339,9 @@ if (recursive == TRUE) {
             evaluations_df <- rbind(evaluations_df, eval_df)
             #######################################################################
             # calculate cpse for each window and horizon
-            cpse_preds <- cpse(actual = all_actuals, predicted = all_preds)
-            cpse_naive <- cpse(actual = all_actuals, predicted = all_naives)
-            cpse_historical <- cpse(actual = all_actuals, predicted = all_historicals)
-            # store the cpse in a dataframe
-            cpse_df_i <- data.frame(Window = "recursive",
-                        Horizon = rep(1, length(cpse_preds)),
-                        Date = predictions_df[predictions_df$Window == "recursive" & predictions_df$Horizon == 1, ]$Date,
-                        CPSE_Lasso = cpse_preds,
-                        CPSE_Naive = cpse_naive,
-                        CPSE_Historical = cpse_historical)
+            cpse_df_i <- calculate_cpse(predictions_df = predictions_df, all_actuals = all_actuals,
+                                all_preds = all_preds, all_naives = all_naives, all_historicals = all_historicals,
+                                window = "recursive", horizon = 1)
             cpse_list[[i]] <- cpse_df_i
             # combine all cpse for this window and horizon
             cpse_df <- rbind(cpse_df, do.call(rbind, cpse_list))
