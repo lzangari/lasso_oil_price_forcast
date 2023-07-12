@@ -164,7 +164,7 @@ for (column_name in names(df)[-1]) {
 }
 
 #######################################################################
-###--------------------- Apply transformation ---------------------###
+###--------------------- Apply transformation ----------------------###
 #######################################################################
 original_data <- c("one_lag_oil_return_price",
                      "geopolitical_risk")
@@ -174,7 +174,7 @@ one_lag_data <- c("oil_stock", "product_net_import", "epui_eu", "epui_usa",
                    "gsci", "gold_price", "copper_future", "federal_fund","unrate_eu")
 #ong_lag_log_data <- c("gdp_usa")
 
-two_lags_data <- c("product_supply", "cpi_eocd", "cpi_usa", "sp500", "msci",
+two_lags_data <- c("product_supply", "cpi_oecd", "cpi_usa", "sp500", "msci",
                      "wui")
 
 three_lags_log_data <- c("oil_export")
