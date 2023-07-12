@@ -156,7 +156,7 @@ barplot_model_coefs <- function(cvfit, predictor_names, window, horizon) {
         geom_bar(stat = "identity") +
         coord_flip() +
         labs(x = "Variable", y = "Coefficient",
-             title = paste("Lasso Coefficients (Window:", window/12, ", Horizon:", horizon, ")"))
+             title = paste("Lasso Coefficients (Window:", window, ", Horizon:", horizon, ")"))
     # save the plot
     plot_path <- paste0(path, "/bar_plot_coefficients")
     create_dir(plot_path)
@@ -193,7 +193,7 @@ plot_coef_heatmap <- function(coefs, window, horizon, path) {
         scale_fill_gradient2(low = "#0c095b", mid = "#f0f2f2", high = "#760f08", midpoint = 0) +
         theme_classic() +
         labs(x = "Date", y = "Variable", fill = "Coefficient",
-            title = paste("Lasso Coefficients Heatmap (Window:", window/12, ", Horizon:", horizon, ")"))
+            title = paste("Lasso Coefficients Heatmap (Window:", window, ", Horizon:", horizon, ")"))
     # save the plot
     plot_path <- paste0(path, "/monthly_perfomance")
     create_dir(plot_path)
@@ -233,7 +233,7 @@ plot_model_size <- function(coefs, window, horizon, path) {
             geom_line(color = "#163925") +
             theme_minimal() +
             labs(x = "Date", y = "Model Size",
-                title = paste("Lasso Model Size (Window:", window/12, ", Horizon:", horizon, ")"))
+                title = paste("Lasso Model Size (Window:", window, ", Horizon:", horizon, ")"))
 
     # save the plot
     plot_path <- paste0(path, "/model_size")
@@ -260,7 +260,7 @@ plot_actual_vs_predicted <- function(predictions_df, window, horizon, path) {
     coord_equal() +
     theme_minimal() +
     labs(x = "Actual", y = "Predicted",
-         title = paste("Actual vs Predicted (Window:", window/12, ", Horizon:", horizon, ")"))
+         title = paste("Actual vs Predicted (Window:", window, ", Horizon:", horizon, ")"))
 
     # save the plot
     plot_path <- paste0(path, "/actual_vs_predicted")
@@ -286,7 +286,7 @@ plot_line_actual_vs_predicted <- function(predictions_df, window, horizon, path)
                                             "Naive" = "blue", "Historical" = "#47da47")) +
 
         labs(x = "Date", y = "Monthly crude oil return (%)",
-            title = paste("Actual and Predicted over time (Window:", window/12, ", Horizon:", horizon, ")"),
+            title = paste("Actual and Predicted over time (Window:", window, ", Horizon:", horizon, ")"),
             color = "Legend") +
         theme(legend.position = "bottom")
     # save the plot
@@ -308,7 +308,7 @@ plot_cpse <- function(cpse_df, window, horizon, path) {
         geom_line(aes(y = CPSE_Naive, color = "Naive")) +
         geom_line(aes(y = CPSE_Historical, color = "Historical")) +
         labs(x = "Date", y = "CPSE",
-            title = paste("Cumulative Prediction Squared Error for window:", window/12, "horizon:", horizon),
+            title = paste("Cumulative Prediction Squared Error for window:", window, "horizon:", horizon),
             color = "Model") +
         theme_minimal()
     # save the plot
