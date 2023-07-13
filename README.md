@@ -20,3 +20,5 @@ Possible packages that need to be installed:
 - glmnet
 - dplyr
 - Metrics
+
+Running the code will generate a folder were the results are stored.

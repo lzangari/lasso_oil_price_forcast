@@ -341,9 +341,9 @@ plot_cpse <- function(cpse_df, window, horizon, path) {
     cpse_filtered <- cpse_df[cpse_df$Window == window & cpse_df$Horizon == horizon, ]
 
     p <- ggplot(cpse_filtered, aes(x = Date)) +
-        geom_line(aes(y = CPSE_Lasso, color = "Lasso")) +
-        geom_line(aes(y = CPSE_Naive, color = "Naive")) +
-        geom_line(aes(y = CPSE_Historical, color = "Historical")) +
+        geom_line(aes(y = CPSE_Lasso, color = "Lasso"), size = 2) +
+        geom_line(aes(y = CPSE_Naive, color = "Naive"), size = 2) +
+        geom_line(aes(y = CPSE_Historical, color = "Historical"), size = 2) +
         labs(x = "Date", y = "CPSE",
             title = paste("Cumulative Prediction Squared Error for window:", window, "horizon:", horizon),
             color = "Model") +
@@ -352,7 +352,7 @@ plot_cpse <- function(cpse_df, window, horizon, path) {
     plot_path <- paste0(path, "/cpse")
     create_dir(plot_path)
     ggsave(filename = paste0(plot_path, "/cpse_window_", window, "_horizon_",
-                                            horizon, ".png"), plot = p, width = 12)
+                                            horizon, ".png"), plot = p, width = 10)
     # save the data
     data_path <- paste0(path, "/cpse_csv")
     create_dir(data_path)

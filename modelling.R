@@ -89,7 +89,7 @@ train_predict <- function(x_train, y_train, x_test, rule ="min", loss_function =
 
     #coefs <- as.vector(coef(cvfit, s = "lambda.min"))
 
-    return(list(preds = preds, coefs = coefs))
+    return(list(preds = preds, coefs = coefs, best_lambda = cvfit$lambda.min))
 }
 
 
@@ -186,6 +186,7 @@ if (rolling == TRUE) {
                     results <- train_predict(x_train = as.matrix(train_data),
                                         y_train = y_train, x_test = as.matrix(test_data), rule = rule_model)
                     preds <- results$preds
+                    best_lambda <- results$best_lambda
                     # get the benchmark predictions
                     naive_preds <- naive_forecast(y_train = y_train, horizon = horizon)
                     historical_preds <- historical_forecast(y_train = y_train, horizon = horizon)
@@ -201,6 +202,7 @@ if (rolling == TRUE) {
                     # Create a data frame for this prediction
                     pred_df <- data.frame(Window = rep(window, length(preds)),
                                             Horizon = rep(horizon, length(preds)),
+                                            BestLambda = rep(best_lambda, length(preds)),
                                             Date = test_data_with_date$date,
                                             Prediction = as.vector(preds),
                                             Truth = test_data_with_date$original_one_lag_oil_return_price,
